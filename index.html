@@ -1,514 +1,666 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Controle de Despesas</title>
+<title>Relatório de Despesas</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial;
-    }
+<style>
 
-    body {
-      background: #f5f5f5;
-      padding: 20px;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
 
-    .container {
-      max-width: 1400px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+body{
+    background:#dcdcdc;
+    padding:20px;
+}
 
-    h1 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
+.container{
+    background:white;
+    max-width:1400px;
+    margin:auto;
+    border:1px solid #000;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+table{
+    width:100%;
+    border-collapse:collapse;
+}
 
-    .field {
-      display: flex;
-      flex-direction: column;
-    }
+td, th{
+    border:1px solid #000;
+    padding:5px;
+    font-size:12px;
+}
 
-    label {
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
+.title{
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    padding:15px;
+}
 
-    input,
-    select {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
+.gray{
+    background:#cfcfcf;
+    font-weight:bold;
+    text-align:center;
+}
 
-    button {
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-    }
+.yellow{
+    background:yellow;
+}
 
-    .salvar {
-      background: #007bff;
-    }
+.center{
+    text-align:center;
+}
 
-    .excel {
-      background: #28a745;
-    }
+.right{
+    text-align:right;
+}
 
-    .pdf {
-      background: #dc3545;
-    }
+.bold{
+    font-weight:bold;
+}
 
-    .delete-btn {
-      background: #999;
-      padding: 8px;
-    }
+.input-field{
+    width:100%;
+    border:none;
+    padding:5px;
+    background:transparent;
+}
 
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
+.input-field:focus{
+    outline:none;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow-x: auto;
-    }
+select{
+    width:100%;
+    border:none;
+    padding:5px;
+}
 
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
-    }
+button{
+    padding:12px 18px;
+    border:none;
+    cursor:pointer;
+    border-radius:5px;
+    font-weight:bold;
+}
 
-    th {
-      background: #f0f0f0;
-    }
+.primary{
+    background:#007bff;
+    color:white;
+}
 
-    img {
-      width: 70px;
-      border-radius: 5px;
-    }
+.success{
+    background:#28a745;
+    color:white;
+}
 
-    .total {
-      margin-top: 20px;
-      text-align: right;
-      font-size: 20px;
-      font-weight: bold;
-    }
+.danger{
+    background:red;
+    color:white;
+}
 
-    @media(max-width:768px) {
-      table {
-        display: block;
-        overflow-x: auto;
-      }
-    }
-  </style>
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+img{
+    width:70px;
+    border-radius:5px;
+}
+
+.form-area{
+    margin-top:20px;
+    padding:20px;
+    border-top:2px solid #000;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+.field label{
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.field input,
+.field select{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.total-red{
+    color:red;
+    font-weight:bold;
+}
+
+.total-blue{
+    color:blue;
+    font-weight:bold;
+}
+
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h1>Controle de Despesas de Viagem</h1>
+<table>
 
-    <div class="grid">
+<tr>
+    <td colspan="9" class="title">
+        RELATÓRIO DE DESPESAS DE VIAGEM
+    </td>
+</tr>
 
-      <div class="field">
-        <label>Funcionário</label>
-        <input type="text" id="funcionario">
-      </div>
+<tr>
+    <td class="gray">PERÍODO</td>
 
-      <div class="field">
-        <label>Cliente</label>
-        <input type="text" id="cliente">
-      </div>
+    <td colspan="3" class="yellow">
+        <input class="input-field" type="text" id="periodo">
+    </td>
 
-      <div class="field">
-        <label>Data Início Viagem</label>
-        <input type="date" id="inicioViagem">
-      </div>
+    <td class="gray">FINALIDADE</td>
 
-      <div class="field">
-        <label>Data Final Viagem</label>
-        <input type="date" id="fimViagem">
-      </div>
+    <td class="yellow">
+        <input class="input-field" type="text" id="finalidade" value="Implantação">
+    </td>
 
-      <div class="field">
-        <label>Data do Cupom</label>
-        <input type="date" id="dataCupom">
-      </div>
+    <td class="gray">Nº CHAMADO</td>
 
-      <div class="field">
-        <label>Categoria</label>
-        <select id="categoria">
-          <option>Refeição</option>
-          <option>Hotel</option>
-          <option>Combustível</option>
-          <option>Pedágio</option>
-          <option>Uber/Táxi</option>
-          <option>Outros</option>
+    <td colspan="2">
+        <input class="input-field" type="text" id="chamado">
+    </td>
+</tr>
+
+<tr>
+
+    <td class="gray">CLIENTE</td>
+
+    <td colspan="5" class="yellow">
+        <input class="input-field" type="text" id="cliente">
+    </td>
+
+    <td class="gray">Cobrar cliente?</td>
+
+    <td colspan="2">
+        <select id="cobrarCliente">
+            <option>Sim</option>
+            <option>Não</option>
         </select>
-      </div>
+    </td>
 
-      <div class="field">
-        <label>Descrição</label>
-        <input type="text" id="descricao" list="listaDescricao">
-        <datalist id="listaDescricao"></datalist>
-      </div>
+</tr>
 
-      <div class="field">
-        <label>Valor</label>
-        <input type="number" id="valor" step="0.01">
-      </div>
+<tr>
 
-      <div class="field">
-        <label>Cupom Fiscal</label>
-        <input type="file" id="imagem" accept="image/*">
-      </div>
+    <td class="gray">FUNCIONÁRIO</td>
 
-    </div>
+    <td colspan="5" class="yellow">
+        <input class="input-field" type="text" id="funcionario">
+    </td>
 
-    <div class="buttons">
-      <button class="salvar" onclick="salvarDespesa()">Salvar Despesa</button>
-      <button class="excel" onclick="exportarExcel()">Exportar Excel</button>
-      <button class="pdf" onclick="exportarPDF()">Exportar PDF</button>
-    </div>
+    <td colspan="3"></td>
 
-    <table>
+</tr>
 
-      <thead>
-        <tr>
-          <th>Funcionário</th>
-          <th>Cliente</th>
-          <th>Período</th>
-          <th>Data Cupom</th>
-          <th>Categoria</th>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Cupom</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
+<tr>
 
-      <tbody id="tabelaDespesas"></tbody>
+    <td colspan="4" class="gray">
+        ORIGEM DESPESAS
+    </td>
 
-    </table>
+    <td colspan="5" class="gray">
+        VALORES
+    </td>
 
-    <div class="total" id="total">
-      Total: R$ 0,00
-    </div>
+</tr>
 
-  </div>
+<tr>
 
-  <script>
+    <td class="gray">DATA</td>
+    <td colspan="3" class="gray">DESCRIÇÃO</td>
+    <td class="gray">REFEIÇÕES</td>
+    <td class="gray">PASSAGEM</td>
+    <td class="gray">VEÍCULO / TÁXI</td>
+    <td class="gray">HOTEL</td>
+    <td class="gray">OUTROS</td>
 
-    let despesas = JSON.parse(localStorage.getItem("despesas")) || [];
+</tr>
 
-    let descricoesSalvas = JSON.parse(localStorage.getItem("descricoes")) || [];
+<tbody id="tabelaDespesas"></tbody>
 
-    atualizarDatalist();
+<tr>
 
-    renderizarTabela();
+    <td colspan="4" class="right bold">
+        TOTAIS
+    </td>
 
-    function primeiraMaiuscula(texto) {
+    <td id="totalRefeicao">R$ 0,00</td>
+    <td id="totalPassagem">R$ 0,00</td>
+    <td id="totalVeiculo">R$ 0,00</td>
+    <td id="totalHotel">R$ 0,00</td>
+    <td id="totalOutros">R$ 0,00</td>
 
-      texto = texto.toLowerCase();
+</tr>
 
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
+<tr>
 
-    function atualizarDatalist() {
+    <td colspan="6" class="bold">
+        VALOR ADIANTAMENTO
+    </td>
 
-      const lista = document.getElementById("listaDescricao");
+    <td colspan="3" id="adiantamento">
+        R$ 0,00
+    </td>
 
-      lista.innerHTML = "";
+</tr>
 
-      descricoesSalvas.forEach(desc => {
+<tr>
 
-        lista.innerHTML += `
-          <option value="${desc}">
-        `;
-      });
-    }
+    <td colspan="6" class="bold">
+        SALDO: CREDOR (DEVEDOR)
+    </td>
 
-    function salvarDespesa() {
+    <td colspan="3" class="total-red">
+        A REEMBOLSAR
+    </td>
 
-      const funcionario = primeiraMaiuscula(document.getElementById("funcionario").value);
+</tr>
 
-      const cliente = primeiraMaiuscula(document.getElementById("cliente").value);
+<tr>
 
-      const inicioViagem = document.getElementById("inicioViagem").value;
+    <td class="gray">ASS. APROVAÇÃO</td>
+    <td colspan="3"></td>
 
-      const fimViagem = document.getElementById("fimViagem").value;
+    <td class="gray">ASS. EMITENTE</td>
+    <td colspan="2"></td>
 
-      const dataCupom = document.getElementById("dataCupom").value;
+    <td class="gray">DATA EMISSÃO</td>
+    <td></td>
 
-      const categoria = document.getElementById("categoria").value;
+</tr>
 
-      const descricao = primeiraMaiuscula(document.getElementById("descricao").value);
+</table>
 
-      const valor = document.getElementById("valor").value;
+<div class="form-area">
 
-      const imagemInput = document.getElementById("imagem");
+<div class="form-grid">
 
-      if (
-        !funcionario ||
-        !cliente ||
-        !inicioViagem ||
-        !fimViagem ||
-        !dataCupom ||
-        !valor
-      ) {
+<div class="field">
+<label>Data do Cupom</label>
+<input type="date" id="dataCupom">
+</div>
+
+<div class="field">
+<label>Categoria</label>
+
+<select id="categoria">
+
+<option>Refeição</option>
+<option>Passagem</option>
+<option>Veículo/Táxi</option>
+<option>Hotel</option>
+<option>Outros</option>
+
+</select>
+
+</div>
+
+<div class="field">
+<label>Descrição</label>
+
+<input
+list="historicoDescricao"
+type="text"
+id="descricao"
+>
+
+<datalist id="historicoDescricao"></datalist>
+
+</div>
+
+<div class="field">
+<label>Valor</label>
+<input type="number" step="0.01" id="valor">
+</div>
+
+<div class="field">
+<label>Cupom Fiscal</label>
+<input type="file" id="imagem" accept="image/*">
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="primary" onclick="salvarDespesa()">
+Salvar Despesa
+</button>
+
+<button class="success" onclick="exportarExcel()">
+Exportar Excel
+</button>
+
+<button class="success" onclick="exportarPDF()">
+Exportar PDF
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let despesas =
+JSON.parse(localStorage.getItem("despesas")) || [];
+
+let descricoes =
+JSON.parse(localStorage.getItem("descricoes")) || [];
+
+renderizarTabela();
+renderizarDescricoes();
+
+function primeiraMaiuscula(texto){
+
+    texto = texto.toLowerCase();
+
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+function salvarDespesa(){
+
+    const funcionario =
+    primeiraMaiuscula(
+        document.getElementById("funcionario").value
+    );
+
+    const cliente =
+    primeiraMaiuscula(
+        document.getElementById("cliente").value
+    );
+
+    const periodo =
+    document.getElementById("periodo").value;
+
+    const finalidade =
+    document.getElementById("finalidade").value;
+
+    const chamado =
+    document.getElementById("chamado").value;
+
+    const cobrarCliente =
+    document.getElementById("cobrarCliente").value;
+
+    const dataCupom =
+    document.getElementById("dataCupom").value;
+
+    const categoria =
+    document.getElementById("categoria").value;
+
+    const descricao =
+    primeiraMaiuscula(
+        document.getElementById("descricao").value
+    );
+
+    const valor =
+    parseFloat(
+        document.getElementById("valor").value
+    );
+
+    const imagemInput =
+    document.getElementById("imagem");
+
+    if(!descricao || !valor){
+
         alert("Preencha os campos obrigatórios");
+
         return;
-      }
+    }
 
-      if (!descricoesSalvas.includes(descricao)) {
+    if(!descricoes.includes(descricao)){
 
-        descricoesSalvas.push(descricao);
+        descricoes.push(descricao);
 
         localStorage.setItem(
-          "descricoes",
-          JSON.stringify(descricoesSalvas)
+            "descricoes",
+            JSON.stringify(descricoes)
         );
 
-        atualizarDatalist();
-      }
+        renderizarDescricoes();
+    }
 
-      const reader = new FileReader();
+    const reader = new FileReader();
 
-      reader.onload = function () {
+    reader.onload = function(){
 
         const despesa = {
-          funcionario,
-          cliente,
-          inicioViagem,
-          fimViagem,
-          dataCupom,
-          categoria,
-          descricao,
-          valor,
-          imagem: reader.result
+
+            funcionario,
+            cliente,
+            periodo,
+            finalidade,
+            chamado,
+            cobrarCliente,
+            dataCupom,
+            categoria,
+            descricao,
+            valor,
+            imagem: reader.result
+
         };
 
         despesas.push(despesa);
 
         localStorage.setItem(
-          "despesas",
-          JSON.stringify(despesas)
+            "despesas",
+            JSON.stringify(despesas)
         );
 
-        limparFormulario();
-
         renderizarTabela();
-      }
 
-      if (imagemInput.files[0]) {
-
-        reader.readAsDataURL(imagemInput.files[0]);
-
-      } else {
-
-        reader.onload();
-      }
+        limparCampos();
     }
 
-    function renderizarTabela() {
+    if(imagemInput.files[0]){
 
-      const tabela = document.getElementById("tabelaDespesas");
+        reader.readAsDataURL(
+            imagemInput.files[0]
+        );
 
-      tabela.innerHTML = "";
+    }else{
 
-      let total = 0;
+        reader.onload();
+    }
 
-      despesas.forEach((d, index) => {
+}
 
-        total += parseFloat(d.valor);
+function renderizarDescricoes(){
+
+    const lista =
+    document.getElementById("historicoDescricao");
+
+    lista.innerHTML = "";
+
+    descricoes.forEach(item=>{
+
+        lista.innerHTML += `
+            <option value="${item}">
+        `;
+    });
+
+}
+
+function renderizarTabela(){
+
+    const tabela =
+    document.getElementById("tabelaDespesas");
+
+    tabela.innerHTML = "";
+
+    let totalRefeicao = 0;
+    let totalPassagem = 0;
+    let totalVeiculo = 0;
+    let totalHotel = 0;
+    let totalOutros = 0;
+
+    despesas.forEach((d,index)=>{
+
+        let refeicao = "";
+        let passagem = "";
+        let veiculo = "";
+        let hotel = "";
+        let outros = "";
+
+        if(d.categoria === "Refeição"){
+
+            refeicao = `R$ ${d.valor.toFixed(2)}`;
+            totalRefeicao += d.valor;
+        }
+
+        if(d.categoria === "Passagem"){
+
+            passagem = `R$ ${d.valor.toFixed(2)}`;
+            totalPassagem += d.valor;
+        }
+
+        if(d.categoria === "Veículo/Táxi"){
+
+            veiculo = `R$ ${d.valor.toFixed(2)}`;
+            totalVeiculo += d.valor;
+        }
+
+        if(d.categoria === "Hotel"){
+
+            hotel = `R$ ${d.valor.toFixed(2)}`;
+            totalHotel += d.valor;
+        }
+
+        if(d.categoria === "Outros"){
+
+            outros = `R$ ${d.valor.toFixed(2)}`;
+            totalOutros += d.valor;
+        }
 
         tabela.innerHTML += `
-        
-          <tr>
 
-            <td>${d.funcionario}</td>
-
-            <td>${d.cliente}</td>
-
-            <td>
-              ${d.inicioViagem} <br>
-              até <br>
-              ${d.fimViagem}
-            </td>
+        <tr>
 
             <td>${d.dataCupom}</td>
 
-            <td>${d.categoria}</td>
-
-            <td>${d.descricao}</td>
-
-            <td>
-              R$ ${parseFloat(d.valor).toFixed(2)}
+            <td colspan="3">
+                ${d.descricao}
             </td>
 
-            <td>
-              ${d.imagem
-              ? `<img src="${d.imagem}">`
-              : `Sem imagem`
-            }
-            </td>
+            <td>${refeicao}</td>
+            <td>${passagem}</td>
+            <td>${veiculo}</td>
+            <td>${hotel}</td>
+            <td>${outros}</td>
 
-            <td>
-              <button class="delete-btn"
-                onclick="removerDespesa(${index})">
-                Excluir
-              </button>
-            </td>
+        </tr>
 
-          </tr>
         `;
-      });
+    });
 
-      document.getElementById("total").innerHTML =
-        `Total: R$ ${total.toFixed(2)}`;
-    }
+    document.getElementById("totalRefeicao").innerHTML =
+    `R$ ${totalRefeicao.toFixed(2)}`;
 
-    function removerDespesa(index) {
+    document.getElementById("totalPassagem").innerHTML =
+    `R$ ${totalPassagem.toFixed(2)}`;
 
-      if (confirm("Deseja excluir esta despesa?")) {
+    document.getElementById("totalVeiculo").innerHTML =
+    `R$ ${totalVeiculo.toFixed(2)}`;
 
-        despesas.splice(index, 1);
+    document.getElementById("totalHotel").innerHTML =
+    `R$ ${totalHotel.toFixed(2)}`;
 
-        localStorage.setItem(
-          "despesas",
-          JSON.stringify(despesas)
-        );
+    document.getElementById("totalOutros").innerHTML =
+    `R$ ${totalOutros.toFixed(2)}`;
+}
 
-        renderizarTabela();
-      }
-    }
+function limparCampos(){
 
-    function limparFormulario() {
+    document.getElementById("dataCupom").value = "";
+    document.getElementById("descricao").value = "";
+    document.getElementById("valor").value = "";
+    document.getElementById("imagem").value = "";
+}
 
-      document.getElementById("dataCupom").value = "";
-      document.getElementById("categoria").value = "Refeição";
-      document.getElementById("descricao").value = "";
-      document.getElementById("valor").value = "";
-      document.getElementById("imagem").value = "";
-    }
+function exportarExcel(){
 
-    function exportarExcel() {
+    const worksheet =
+    XLSX.utils.json_to_sheet(despesas);
 
-      const dados = despesas.map(d => ({
+    const workbook =
+    XLSX.utils.book_new();
 
-        Funcionário: d.funcionario,
-
-        Cliente: d.cliente,
-
-        "Data Início": d.inicioViagem,
-
-        "Data Final": d.fimViagem,
-
-        "Data Cupom": d.dataCupom,
-
-        Categoria: d.categoria,
-
-        Descrição: d.descricao,
-
-        Valor: d.valor
-
-      }));
-
-      const worksheet =
-        XLSX.utils.json_to_sheet(dados);
-
-      const workbook =
-        XLSX.utils.book_new();
-
-      XLSX.utils.book_append_sheet(
+    XLSX.utils.book_append_sheet(
         workbook,
         worksheet,
         "Despesas"
-      );
+    );
 
-      XLSX.writeFile(
+    XLSX.writeFile(
         workbook,
         "despesas_viagem.xlsx"
-      );
-    }
+    );
+}
 
-    async function exportarPDF() {
+async function exportarPDF(){
 
-      const { jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf;
 
-      const doc = new jsPDF();
+    const doc = new jsPDF();
 
-      let y = 10;
+    doc.text(
+        "Relatório de Despesas",
+        10,
+        10
+    );
 
-      doc.setFontSize(16);
+    let y = 20;
 
-      doc.text("Relatório de Despesas", 10, y);
-
-      y += 10;
-
-      despesas.forEach((d, i) => {
-
-        doc.setFontSize(10);
+    despesas.forEach((d,index)=>{
 
         doc.text(
-          `
-Funcionário: ${d.funcionario}
-Cliente: ${d.cliente}
-Período: ${d.inicioViagem} até ${d.fimViagem}
-Data Cupom: ${d.dataCupom}
-Categoria: ${d.categoria}
-Descrição: ${d.descricao}
-Valor: R$ ${parseFloat(d.valor).toFixed(2)}
-          `,
-          10,
-          y
+            `${d.dataCupom} - ${d.descricao} - R$ ${d.valor}`,
+            10,
+            y
         );
 
-        y += 45;
+        y += 10;
+    });
 
-        if (y > 250) {
+    doc.save("despesas_viagem.pdf");
+}
 
-          doc.addPage();
-
-          y = 10;
-        }
-      });
-
-      doc.save("despesas.pdf");
-    }
-
-  </script>
+</script>
 
 </body>
-
 </html>
