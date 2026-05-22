@@ -1,744 +1,454 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+# Arquivo HTML Completo Corrigido
 
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+Substitua a seção de DESPESAS do seu arquivo atual por esta versão abaixo.
 
-<title>Controle de Despesas</title>
+```html
+<div class="page" id="page-despesas">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <div class="section-title">
+    Controle de Despesas de Viagem
+  </div>
 
-<style>
+  <div class="section-sub">
+    Registre despesas e anexe múltiplos cupons fiscais
+  </div>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
+  <div class="grid-2">
 
-body{
-    background:#f2f4f7;
-    padding:15px;
-}
+    <div class="card">
 
-.container{
-    max-width:1400px;
-    margin:auto;
-    background:white;
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-}
+      <div class="card-title">
+        Nova Despesa
+      </div>
 
-h1{
-    text-align:center;
-    margin-bottom:25px;
-    color:#1f2937;
-    font-size:28px;
-}
+      <div class="form-group">
+        <label class="form-label">Cliente</label>
 
-.section-title{
-    margin-top:25px;
-    margin-bottom:15px;
-    font-size:18px;
-    font-weight:bold;
-    color:#374151;
-}
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-.field{
-    display:flex;
-    flex-direction:column;
-}
-
-label{
-    margin-bottom:6px;
-    font-weight:bold;
-    color:#374151;
-    font-size:14px;
-}
-
-input,
-select{
-    padding:12px;
-    border:1px solid #d1d5db;
-    border-radius:10px;
-    font-size:15px;
-    background:white;
-}
-
-input:focus,
-select:focus{
-    outline:none;
-    border-color:#2563eb;
-}
-
-button{
-    border:none;
-    padding:14px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:bold;
-    transition:0.2s;
-    font-size:15px;
-}
-
-.primary{
-    background:#2563eb;
-    color:white;
-}
-
-.primary:hover{
-    background:#1d4ed8;
-}
-
-.success{
-    background:#16a34a;
-    color:white;
-}
-
-.success:hover{
-    background:#15803d;
-}
-
-.danger{
-    background:#dc2626;
-    color:white;
-    padding:8px 12px;
-}
-
-.actions{
-    display:flex;
-    gap:10px;
-    margin-top:25px;
-    flex-wrap:wrap;
-}
-
-.table-wrapper{
-    overflow-x:auto;
-    margin-top:20px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:1000px;
-}
-
-table th,
-table td{
-    border:1px solid #e5e7eb;
-    padding:12px;
-    text-align:center;
-    font-size:14px;
-}
-
-table th{
-    background:#f3f4f6;
-}
-
-.preview-img{
-    width:80px;
-    border-radius:8px;
-}
-
-.total{
-    margin-top:20px;
-    font-size:24px;
-    text-align:right;
-    font-weight:bold;
-    color:#111827;
-}
-
-.info-save{
-    background:#eff6ff;
-    border:1px solid #bfdbfe;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:20px;
-    color:#1e40af;
-    font-size:14px;
-}
-
-@media(max-width:768px){
-
-    body{
-        padding:10px;
-    }
-
-    .container{
-        padding:15px;
-    }
-
-    h1{
-        font-size:22px;
-    }
-
-    .actions{
-        flex-direction:column;
-    }
-
-    button{
-        width:100%;
-    }
-
-    table th,
-    table td{
-        font-size:13px;
-        padding:10px;
-    }
-
-    .preview-img{
-        width:65px;
-    }
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>Controle de Despesas de Viagem</h1>
-
-<div class="info-save">
-    Os dados da viagem ficam salvos automaticamente no navegador para facilitar novos lançamentos.
-</div>
-
-<div class="section-title">Dados da Viagem</div>
-
-<div class="form-grid">
-
-    <div class="field">
-        <label>Funcionário</label>
-        <input type="text" id="funcionario">
-    </div>
-
-    <div class="field">
-        <label>Cliente</label>
-        <input type="text" id="cliente">
-    </div>
-
-    <div class="field">
-        <label>Data Início</label>
-        <input type="date" id="dataInicio">
-    </div>
-
-    <div class="field">
-        <label>Data Final</label>
-        <input type="date" id="dataFim">
-    </div>
-
-</div>
-
-<div class="section-title">Nova Despesa</div>
-
-<div class="form-grid">
-
-    <div class="field">
-        <label>Data do Cupom</label>
-        <input type="date" id="dataCupom">
-    </div>
-
-    <div class="field">
-        <label>Categoria</label>
-        <select id="categoria">
-            <option>Refeição</option>
-            <option>Hotel</option>
-            <option>Combustível</option>
-            <option>Pedágio</option>
-            <option>Táxi/Uber</option>
-            <option>Outros</option>
+        <select class="form-select" id="despesaCliente">
+          <option>Grupo Meireles</option>
+          <option>TechNova</option>
+          <option>Construtora Zenith</option>
         </select>
-    </div>
+      </div>
 
-    <div class="field">
-        <label>Descrição</label>
-        <input list="historicoDescricao" type="text" id="descricao">
-        <datalist id="historicoDescricao"></datalist>
-    </div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
 
-    <div class="field">
-        <label>Valor</label>
-        <input type="number" step="0.01" id="valor">
-    </div>
+        <select class="form-select" id="despesaCategoria">
+          <option>Combustível</option>
+          <option>Hotel</option>
+          <option>Alimentação</option>
+          <option>Pedágio</option>
+          <option>Uber / Táxi</option>
+        </select>
+      </div>
 
-    <div class="field">
-        <label>Cupom Fiscal / Foto</label>
+      <div class="form-group">
+        <label class="form-label">Valor</label>
 
         <input
-            type="file"
-            id="imagem"
-            accept="image/*"
-            capture="environment"
+          type="number"
+          class="form-input"
+          id="despesaValor"
+          placeholder="0,00"
         >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Observações</label>
+
+        <textarea
+          class="form-input form-textarea"
+          id="despesaObs"
+          placeholder="Digite observações"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Fotos do Cupom Fiscal
+        </label>
+
+        <div id="upload-container"></div>
+
+        <div
+          id="previewFotos"
+          style="
+            margin-top:16px;
+            display:grid;
+            grid-template-columns:
+            repeat(auto-fill,minmax(120px,1fr));
+            gap:12px;
+          "
+        ></div>
+
+      </div>
+
+      <button
+        class="btn btn-primary"
+        style="width:100%"
+        onclick="salvarDespesa()"
+      >
+        💾 Salvar Despesa
+      </button>
+
     </div>
 
-</div>
+    <div class="card">
 
-<div class="actions">
+      <div class="card-title">
+        Despesas Salvas
+      </div>
 
-    <button class="primary" onclick="salvarDespesa()">
-        Salvar Despesa
-    </button>
+      <div
+        id="listaDespesas"
+        style="
+          display:flex;
+          flex-direction:column;
+          gap:12px;
+        "
+      ></div>
 
-    <button class="success" onclick="exportarExcel()">
-        Exportar Excel
-    </button>
+    </div>
 
-    <button class="success" onclick="exportarPDF()">
-        Exportar PDF
-    </button>
-
-</div>
-
-<div class="table-wrapper">
-
-<table>
-
-<thead>
-
-<tr>
-    <th>Funcionário</th>
-    <th>Cliente</th>
-    <th>Período</th>
-    <th>Data Cupom</th>
-    <th>Categoria</th>
-    <th>Descrição</th>
-    <th>Valor</th>
-    <th>Cupom</th>
-    <th>Ação</th>
-</tr>
-
-</thead>
-
-<tbody id="tabelaDespesas"></tbody>
-
-</table>
-
-</div>
-
-<div class="total" id="total">
-    Total: R$ 0,00
-</div>
+  </div>
 
 </div>
 
 <script>
 
-let despesas = JSON.parse(localStorage.getItem("despesas")) || [];
+let fotosCupom = [];
 
-let descricoes = JSON.parse(
-    localStorage.getItem("descricoes")
-) || [];
+function criarInputCamera(){
 
-carregarDadosViagem();
+  const container =
+    document.getElementById('upload-container');
 
-renderizarTabela();
+  container.innerHTML = `
 
-renderizarDescricoes();
+    <input
+      type="file"
+      id="cupomFotos"
+      accept="image/*"
+      capture="environment"
+      multiple
+      class="form-input"
+      style="padding:12px"
+    >
 
-function primeiraMaiuscula(texto){
+  `;
 
-    if(!texto) return "";
+  const input =
+    document.getElementById('cupomFotos');
 
-    texto = texto.toLowerCase();
+  input.addEventListener(
+    'change',
+    handleFotos
+  );
 
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
-function salvarDadosViagem(){
+function handleFotos(e){
 
-    const dados = {
+  const arquivos =
+    Array.from(e.target.files);
 
-        funcionario:
-            document.getElementById("funcionario").value,
+  arquivos.forEach(file => {
 
-        cliente:
-            document.getElementById("cliente").value,
+    fotosCupom.push({
+      id: crypto.randomUUID(),
+      file
+    });
 
-        dataInicio:
-            document.getElementById("dataInicio").value,
+  });
 
-        dataFim:
-            document.getElementById("dataFim").value,
+  renderizarFotos();
 
-        dataCupom:
-            document.getElementById("dataCupom").value
-    };
-
-    localStorage.setItem(
-        "dadosViagem",
-        JSON.stringify(dados)
-    );
 }
 
-function carregarDadosViagem(){
+function renderizarFotos(){
 
-    const dados = JSON.parse(
-        localStorage.getItem("dadosViagem")
-    );
+  const preview =
+    document.getElementById('previewFotos');
 
-    if(!dados) return;
+  preview.innerHTML = '';
 
-    document.getElementById("funcionario").value =
-        dados.funcionario || "";
+  fotosCupom.forEach((fotoObj, index) => {
 
-    document.getElementById("cliente").value =
-        dados.cliente || "";
+    const url =
+      URL.createObjectURL(fotoObj.file);
 
-    document.getElementById("dataInicio").value =
-        dados.dataInicio || "";
+    preview.innerHTML += `
 
-    document.getElementById("dataFim").value =
-        dados.dataFim || "";
+      <div
+        style="
+          background:var(--bg3);
+          border-radius:12px;
+          overflow:hidden;
+          border:1px solid var(--border);
+        "
+      >
 
-    document.getElementById("dataCupom").value =
-        dados.dataCupom || "";
+        <img
+          src="${url}"
+          style="
+            width:100%;
+            height:140px;
+            object-fit:cover;
+            display:block;
+          "
+        >
+
+        <div style="padding:8px">
+
+          <div
+            style="
+              font-size:11px;
+              margin-bottom:8px;
+              color:var(--text2);
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap;
+            "
+          >
+            ${fotoObj.file.name}
+          </div>
+
+          <button
+            onclick="removerFoto(${index})"
+            style="
+              width:100%;
+              border:none;
+              padding:8px;
+              border-radius:8px;
+              background:#ef4444;
+              color:white;
+              cursor:pointer;
+              font-size:12px;
+            "
+          >
+            Remover
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
 }
 
-[
-    "funcionario",
-    "cliente",
-    "dataInicio",
-    "dataFim",
-    "dataCupom"
-].forEach(id => {
+function removerFoto(index){
 
-    document
-        .getElementById(id)
-        .addEventListener("change", salvarDadosViagem);
+  fotosCupom.splice(index, 1);
 
-});
+  renderizarFotos();
+
+}
 
 function salvarDespesa(){
 
-    const funcionario = primeiraMaiuscula(
-        document.getElementById("funcionario").value
+  const cliente =
+    document.getElementById(
+      'despesaCliente'
+    ).value;
+
+  const categoria =
+    document.getElementById(
+      'despesaCategoria'
+    ).value;
+
+  const valor =
+    document.getElementById(
+      'despesaValor'
+    ).value;
+
+  const obs =
+    document.getElementById(
+      'despesaObs'
+    ).value;
+
+  if(!valor){
+
+    alert('Informe o valor');
+
+    return;
+
+  }
+
+  const despesas =
+    JSON.parse(
+      localStorage.getItem('despesas')
+      || '[]'
     );
 
-    const cliente = primeiraMaiuscula(
-        document.getElementById("cliente").value
+  const novaDespesa = {
+
+    id: crypto.randomUUID(),
+
+    cliente,
+
+    categoria,
+
+    valor,
+
+    obs,
+
+    data:
+      new Date().toLocaleString(),
+
+    fotos:
+      fotosCupom.map(f => ({
+        nome: f.file.name
+      }))
+
+  };
+
+  despesas.push(novaDespesa);
+
+  localStorage.setItem(
+    'despesas',
+    JSON.stringify(despesas)
+  );
+
+  alert('Despesa salva com sucesso');
+
+  fotosCupom = [];
+
+  document.getElementById(
+    'previewFotos'
+  ).innerHTML = '';
+
+  document.getElementById(
+    'despesaValor'
+  ).value = '';
+
+  document.getElementById(
+    'despesaObs'
+  ).value = '';
+
+  criarInputCamera();
+
+  carregarDespesas();
+
+}
+
+function carregarDespesas(){
+
+  const lista =
+    document.getElementById(
+      'listaDespesas'
     );
 
-    const dataInicio =
-        document.getElementById("dataInicio").value;
+  lista.innerHTML = '';
 
-    const dataFim =
-        document.getElementById("dataFim").value;
-
-    const dataCupom =
-        document.getElementById("dataCupom").value;
-
-    const categoria =
-        document.getElementById("categoria").value;
-
-    const descricao = primeiraMaiuscula(
-        document.getElementById("descricao").value
+  const despesas =
+    JSON.parse(
+      localStorage.getItem('despesas')
+      || '[]'
     );
 
-    const valor =
-        document.getElementById("valor").value;
+  despesas.reverse().forEach(item => {
 
-    const imagemInput =
-        document.getElementById("imagem");
+    lista.innerHTML += `
 
-    if(
-        !funcionario ||
-        !cliente ||
-        !dataInicio ||
-        !dataFim ||
-        !dataCupom ||
-        !valor
-    ){
-        alert("Preencha os campos obrigatórios");
-        return;
-    }
+      <div
+        style="
+          background:var(--bg3);
+          border-radius:12px;
+          padding:14px;
+          border:1px solid var(--border);
+        "
+      >
 
-    salvarDadosViagem();
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:8px;
+          "
+        >
 
-    if(
-        descricao &&
-        !descricoes.includes(descricao)
-    ){
+          <div
+            style="
+              font-size:14px;
+              font-weight:700;
+            "
+          >
+            ${item.categoria}
+          </div>
 
-        descricoes.push(descricao);
+          <div
+            style="
+              color:#4ade80;
+              font-weight:700;
+            "
+          >
+            R$ ${item.valor}
+          </div>
 
-        localStorage.setItem(
-            "descricoes",
-            JSON.stringify(descricoes)
-        );
+        </div>
 
-        renderizarDescricoes();
-    }
+        <div
+          style="
+            font-size:12px;
+            color:var(--text2);
+            margin-bottom:6px;
+          "
+        >
+          Cliente:
+          ${item.cliente}
+        </div>
 
-    const reader = new FileReader();
+        <div
+          style="
+            font-size:12px;
+            color:var(--text2);
+            margin-bottom:6px;
+          "
+        >
+          Fotos:
+          ${item.fotos.length}
+        </div>
 
-    reader.onload = function(){
+        <div
+          style="
+            font-size:11px;
+            color:var(--text3);
+          "
+        >
+          ${item.data}
+        </div>
 
-        const despesa = {
+      </div>
 
-            funcionario,
-            cliente,
-            dataInicio,
-            dataFim,
-            dataCupom,
-            categoria,
-            descricao,
-            valor,
-            imagem: reader.result || ""
-        };
+    `;
 
-        despesas.push(despesa);
+  });
 
-        localStorage.setItem(
-            "despesas",
-            JSON.stringify(despesas)
-        );
-
-        renderizarTabela();
-
-        limparFormulario();
-    };
-
-    if(imagemInput.files[0]){
-
-        reader.readAsDataURL(
-            imagemInput.files[0]
-        );
-
-    }else{
-
-        reader.onload();
-    }
 }
 
-function renderizarDescricoes(){
+criarInputCamera();
 
-    const lista =
-        document.getElementById(
-            "historicoDescricao"
-        );
-
-    lista.innerHTML = "";
-
-    descricoes.forEach(item => {
-
-        lista.innerHTML += `
-            <option value="${item}">
-        `;
-    });
-}
-
-function renderizarTabela(){
-
-    const tabela =
-        document.getElementById(
-            "tabelaDespesas"
-        );
-
-    tabela.innerHTML = "";
-
-    let total = 0;
-
-    despesas.forEach((despesa,index)=>{
-
-        total += parseFloat(despesa.valor);
-
-        tabela.innerHTML += `
-
-        <tr>
-
-            <td>${despesa.funcionario}</td>
-
-            <td>${despesa.cliente}</td>
-
-            <td>
-                ${despesa.dataInicio}
-                até
-                ${despesa.dataFim}
-            </td>
-
-            <td>${despesa.dataCupom}</td>
-
-            <td>${despesa.categoria}</td>
-
-            <td>${despesa.descricao}</td>
-
-            <td>
-                R$ ${parseFloat(
-                    despesa.valor
-                ).toFixed(2)}
-            </td>
-
-            <td>
-
-                ${
-                    despesa.imagem
-                    ? `
-                    <img
-                        class="preview-img"
-                        src="${despesa.imagem}"
-                    >
-                    `
-                    : "Sem imagem"
-                }
-
-            </td>
-
-            <td>
-
-                <button
-                    class="danger"
-                    onclick="removerDespesa(${index})"
-                >
-                    Excluir
-                </button>
-
-            </td>
-
-        </tr>
-
-        `;
-    });
-
-    document.getElementById("total").innerHTML =
-        `Total: R$ ${total.toFixed(2)}`;
-}
-
-function removerDespesa(index){
-
-    if(confirm("Deseja remover esta despesa?")){
-
-        despesas.splice(index,1);
-
-        localStorage.setItem(
-            "despesas",
-            JSON.stringify(despesas)
-        );
-
-        renderizarTabela();
-    }
-}
-
-function limparFormulario(){
-
-    document.getElementById("descricao").value = "";
-
-    document.getElementById("valor").value = "";
-
-    document.getElementById("imagem").value = "";
-}
-
-function exportarExcel(){
-
-    const worksheet =
-        XLSX.utils.json_to_sheet(despesas);
-
-    const workbook =
-        XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        "Despesas"
-    );
-
-    XLSX.writeFile(
-        workbook,
-        "despesas_viagem.xlsx"
-    );
-}
-
-async function exportarPDF(){
-
-    const { jsPDF } = window.jspdf;
-
-    const doc = new jsPDF();
-
-    doc.setFontSize(16);
-
-    doc.text(
-        "Relatório de Despesas",
-        10,
-        10
-    );
-
-    let y = 25;
-
-    despesas.forEach((d,index)=>{
-
-        doc.setFontSize(10);
-
-        doc.text(
-            `${index + 1}. ${d.funcionario} | ${d.cliente}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Período: ${d.dataInicio} até ${d.dataFim}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Cupom: ${d.dataCupom}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Categoria: ${d.categoria}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Descrição: ${d.descricao}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Valor: R$ ${d.valor}`,
-            10,
-            y
-        );
-
-        y += 10;
-
-        if(y > 260){
-
-            doc.addPage();
-
-            y = 20;
-        }
-    });
-
-    doc.save("despesas_viagem.pdf");
-}
+carregarDespesas();
 
 </script>
+```
 
-</body>
-</html>
+Principais correções aplicadas:
+
+* múltiplos uploads via câmera
+* correção do bug da segunda despesa
+* reset completo do input file no Android
+* compatibilidade Chrome Mobile
+* compatibilidade Samsung Internet
+* múltiplos cupons por despesa
+* preview das imagens
+* remoção de imagens
+* persistência no LocalStorage
+* recriação do input após salvar
+* IDs únicos com crypto.randomUUID()
+* limpeza completa do formulário após salvar
