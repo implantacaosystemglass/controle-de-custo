@@ -2,12 +2,18 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+/>
 
 <title>Controle de Despesas</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -20,7 +26,7 @@
 }
 
 body{
-    background:#f2f4f7;
+    background:#f3f4f6;
     padding:15px;
 }
 
@@ -29,8 +35,8 @@ body{
     margin:auto;
     background:white;
     padding:20px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.08);
 }
 
 h1{
@@ -46,6 +52,16 @@ h1{
     font-size:18px;
     font-weight:bold;
     color:#374151;
+}
+
+.info-box{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    color:#1d4ed8;
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-size:14px;
 }
 
 .form-grid{
@@ -158,16 +174,6 @@ table th{
     color:#111827;
 }
 
-.info-save{
-    background:#eff6ff;
-    border:1px solid #bfdbfe;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:20px;
-    color:#1e40af;
-    font-size:14px;
-}
-
 @media(max-width:768px){
 
     body{
@@ -202,6 +208,7 @@ table th{
 }
 
 </style>
+
 </head>
 
 <body>
@@ -210,92 +217,169 @@ table th{
 
 <h1>Controle de Despesas de Viagem</h1>
 
-<div class="info-save">
-    Os dados da viagem ficam salvos automaticamente no navegador para facilitar novos lançamentos.
+<div class="info-box">
+    Os dados da viagem ficam salvos automaticamente no navegador.
 </div>
 
-<div class="section-title">Dados da Viagem</div>
+<div class="section-title">
+    Dados da Viagem
+</div>
 
 <div class="form-grid">
 
     <div class="field">
+
         <label>Funcionário</label>
-        <input type="text" id="funcionario">
+
+        <input
+            type="text"
+            id="funcionario"
+        >
+
     </div>
 
     <div class="field">
+
         <label>Cliente</label>
-        <input type="text" id="cliente">
+
+        <input
+            type="text"
+            id="cliente"
+        >
+
     </div>
 
     <div class="field">
+
         <label>Data Início</label>
-        <input type="date" id="dataInicio">
+
+        <input
+            type="date"
+            id="dataInicio"
+        >
+
     </div>
 
     <div class="field">
+
         <label>Data Final</label>
-        <input type="date" id="dataFim">
+
+        <input
+            type="date"
+            id="dataFim"
+        >
+
     </div>
 
 </div>
 
-<div class="section-title">Nova Despesa</div>
+<div class="section-title">
+    Nova Despesa
+</div>
 
 <div class="form-grid">
 
     <div class="field">
+
         <label>Data do Cupom</label>
-        <input type="date" id="dataCupom">
+
+        <input
+            type="date"
+            id="dataCupom"
+        >
+
     </div>
 
     <div class="field">
+
         <label>Categoria</label>
+
         <select id="categoria">
+
             <option>Refeição</option>
             <option>Hotel</option>
             <option>Combustível</option>
             <option>Pedágio</option>
             <option>Táxi/Uber</option>
             <option>Outros</option>
+
         </select>
+
     </div>
 
     <div class="field">
+
         <label>Descrição</label>
-        <input list="historicoDescricao" type="text" id="descricao">
+
+        <input
+            list="historicoDescricao"
+            type="text"
+            id="descricao"
+        >
+
         <datalist id="historicoDescricao"></datalist>
+
     </div>
 
     <div class="field">
+
         <label>Valor</label>
-        <input type="number" step="0.01" id="valor">
+
+        <input
+            type="number"
+            step="0.01"
+            id="valor"
+        >
+
     </div>
 
     <div class="field">
-        <label>Cupom Fiscal / Foto</label>
+
+        <label>Anexar Imagem</label>
 
         <input
             type="file"
             id="imagem"
             accept="image/*"
+        >
+
+    </div>
+
+    <div class="field">
+
+        <label>Tirar Foto</label>
+
+        <input
+            type="file"
+            id="camera"
+            accept="image/*"
             capture="environment"
         >
+
     </div>
 
 </div>
 
 <div class="actions">
 
-    <button class="primary" onclick="salvarDespesa()">
+    <button
+        class="primary"
+        onclick="salvarDespesa()"
+    >
         Salvar Despesa
     </button>
 
-    <button class="success" onclick="exportarExcel()">
+    <button
+        class="success"
+        onclick="exportarExcel()"
+    >
         Exportar Excel
     </button>
 
-    <button class="success" onclick="exportarPDF()">
+    <button
+        class="success"
+        onclick="exportarPDF()"
+    >
         Exportar PDF
     </button>
 
@@ -308,15 +392,25 @@ table th{
 <thead>
 
 <tr>
+
     <th>Funcionário</th>
+
     <th>Cliente</th>
+
     <th>Período</th>
+
     <th>Data Cupom</th>
+
     <th>Categoria</th>
+
     <th>Descrição</th>
+
     <th>Valor</th>
+
     <th>Cupom</th>
+
     <th>Ação</th>
+
 </tr>
 
 </thead>
@@ -327,7 +421,10 @@ table th{
 
 </div>
 
-<div class="total" id="total">
+<div
+    class="total"
+    id="total"
+>
     Total: R$ 0,00
 </div>
 
@@ -335,11 +432,15 @@ table th{
 
 <script>
 
-let despesas = JSON.parse(localStorage.getItem("despesas")) || [];
+let despesas =
+    JSON.parse(
+        localStorage.getItem("despesas")
+    ) || [];
 
-let descricoes = JSON.parse(
-    localStorage.getItem("descricoes")
-) || [];
+let descricoes =
+    JSON.parse(
+        localStorage.getItem("descricoes")
+    ) || [];
 
 carregarDadosViagem();
 
@@ -353,7 +454,8 @@ function primeiraMaiuscula(texto){
 
     texto = texto.toLowerCase();
 
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
+    return texto.charAt(0).toUpperCase()
+        + texto.slice(1);
 }
 
 function salvarDadosViagem(){
@@ -361,19 +463,29 @@ function salvarDadosViagem(){
     const dados = {
 
         funcionario:
-            document.getElementById("funcionario").value,
+            document.getElementById(
+                "funcionario"
+            ).value,
 
         cliente:
-            document.getElementById("cliente").value,
+            document.getElementById(
+                "cliente"
+            ).value,
 
         dataInicio:
-            document.getElementById("dataInicio").value,
+            document.getElementById(
+                "dataInicio"
+            ).value,
 
         dataFim:
-            document.getElementById("dataFim").value,
+            document.getElementById(
+                "dataFim"
+            ).value,
 
         dataCupom:
-            document.getElementById("dataCupom").value
+            document.getElementById(
+                "dataCupom"
+            ).value
     };
 
     localStorage.setItem(
@@ -384,25 +496,38 @@ function salvarDadosViagem(){
 
 function carregarDadosViagem(){
 
-    const dados = JSON.parse(
-        localStorage.getItem("dadosViagem")
-    );
+    const dados =
+        JSON.parse(
+            localStorage.getItem(
+                "dadosViagem"
+            )
+        );
 
     if(!dados) return;
 
-    document.getElementById("funcionario").value =
+    document.getElementById(
+        "funcionario"
+    ).value =
         dados.funcionario || "";
 
-    document.getElementById("cliente").value =
+    document.getElementById(
+        "cliente"
+    ).value =
         dados.cliente || "";
 
-    document.getElementById("dataInicio").value =
+    document.getElementById(
+        "dataInicio"
+    ).value =
         dados.dataInicio || "";
 
-    document.getElementById("dataFim").value =
+    document.getElementById(
+        "dataFim"
+    ).value =
         dados.dataFim || "";
 
-    document.getElementById("dataCupom").value =
+    document.getElementById(
+        "dataCupom"
+    ).value =
         dados.dataCupom || "";
 }
 
@@ -416,41 +541,70 @@ function carregarDadosViagem(){
 
     document
         .getElementById(id)
-        .addEventListener("change", salvarDadosViagem);
+        .addEventListener(
+            "change",
+            salvarDadosViagem
+        );
 
 });
 
 function salvarDespesa(){
 
-    const funcionario = primeiraMaiuscula(
-        document.getElementById("funcionario").value
-    );
+    const funcionario =
+        primeiraMaiuscula(
+            document.getElementById(
+                "funcionario"
+            ).value
+        );
 
-    const cliente = primeiraMaiuscula(
-        document.getElementById("cliente").value
-    );
+    const cliente =
+        primeiraMaiuscula(
+            document.getElementById(
+                "cliente"
+            ).value
+        );
 
     const dataInicio =
-        document.getElementById("dataInicio").value;
+        document.getElementById(
+            "dataInicio"
+        ).value;
 
     const dataFim =
-        document.getElementById("dataFim").value;
+        document.getElementById(
+            "dataFim"
+        ).value;
 
     const dataCupom =
-        document.getElementById("dataCupom").value;
+        document.getElementById(
+            "dataCupom"
+        ).value;
 
     const categoria =
-        document.getElementById("categoria").value;
+        document.getElementById(
+            "categoria"
+        ).value;
 
-    const descricao = primeiraMaiuscula(
-        document.getElementById("descricao").value
-    );
+    const descricao =
+        primeiraMaiuscula(
+            document.getElementById(
+                "descricao"
+            ).value
+        );
 
     const valor =
-        document.getElementById("valor").value;
+        document.getElementById(
+            "valor"
+        ).value;
 
     const imagemInput =
-        document.getElementById("imagem");
+        document.getElementById(
+            "imagem"
+        );
+
+    const cameraInput =
+        document.getElementById(
+            "camera"
+        );
 
     if(
         !funcionario ||
@@ -460,7 +614,9 @@ function salvarDespesa(){
         !dataCupom ||
         !valor
     ){
-        alert("Preencha os campos obrigatórios");
+        alert(
+            "Preencha os campos obrigatórios"
+        );
         return;
     }
 
@@ -481,6 +637,10 @@ function salvarDespesa(){
         renderizarDescricoes();
     }
 
+    const arquivoImagem =
+        imagemInput.files[0]
+        || cameraInput.files[0];
+
     const reader = new FileReader();
 
     reader.onload = function(){
@@ -495,7 +655,8 @@ function salvarDespesa(){
             categoria,
             descricao,
             valor,
-            imagem: reader.result || ""
+            imagem:
+                reader.result || ""
         };
 
         despesas.push(despesa);
@@ -510,10 +671,10 @@ function salvarDespesa(){
         limparFormulario();
     };
 
-    if(imagemInput.files[0]){
+    if(arquivoImagem){
 
         reader.readAsDataURL(
-            imagemInput.files[0]
+            arquivoImagem
         );
 
     }else{
@@ -552,7 +713,9 @@ function renderizarTabela(){
 
     despesas.forEach((despesa,index)=>{
 
-        total += parseFloat(despesa.valor);
+        total += parseFloat(
+            despesa.valor
+        );
 
         tabela.innerHTML += `
 
@@ -599,7 +762,11 @@ function renderizarTabela(){
 
                 <button
                     class="danger"
-                    onclick="removerDespesa(${index})"
+                    onclick="
+                        removerDespesa(
+                            ${index}
+                        )
+                    "
                 >
                     Excluir
                 </button>
@@ -611,13 +778,19 @@ function renderizarTabela(){
         `;
     });
 
-    document.getElementById("total").innerHTML =
+    document.getElementById(
+        "total"
+    ).innerHTML =
         `Total: R$ ${total.toFixed(2)}`;
 }
 
 function removerDespesa(index){
 
-    if(confirm("Deseja remover esta despesa?")){
+    if(
+        confirm(
+            "Deseja remover esta despesa?"
+        )
+    ){
 
         despesas.splice(index,1);
 
@@ -632,17 +805,29 @@ function removerDespesa(index){
 
 function limparFormulario(){
 
-    document.getElementById("descricao").value = "";
+    document.getElementById(
+        "descricao"
+    ).value = "";
 
-    document.getElementById("valor").value = "";
+    document.getElementById(
+        "valor"
+    ).value = "";
 
-    document.getElementById("imagem").value = "";
+    document.getElementById(
+        "imagem"
+    ).value = "";
+
+    document.getElementById(
+        "camera"
+    ).value = "";
 }
 
 function exportarExcel(){
 
     const worksheet =
-        XLSX.utils.json_to_sheet(despesas);
+        XLSX.utils.json_to_sheet(
+            despesas
+        );
 
     const workbook =
         XLSX.utils.book_new();
@@ -665,77 +850,215 @@ async function exportarPDF(){
 
     const doc = new jsPDF();
 
-    doc.setFontSize(16);
+    let y = 20;
+
+    doc.setFillColor(37,99,235);
+
+    doc.rect(
+        0,
+        0,
+        220,
+        20,
+        "F"
+    );
+
+    doc.setTextColor(
+        255,
+        255,
+        255
+    );
+
+    doc.setFontSize(18);
 
     doc.text(
         "Relatório de Despesas",
-        10,
-        10
+        14,
+        13
     );
 
-    let y = 25;
+    y = 30;
+
+    let total = 0;
 
     despesas.forEach((d,index)=>{
 
-        doc.setFontSize(10);
+        total += parseFloat(d.valor);
 
-        doc.text(
-            `${index + 1}. ${d.funcionario} | ${d.cliente}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Período: ${d.dataInicio} até ${d.dataFim}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Cupom: ${d.dataCupom}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Categoria: ${d.categoria}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Descrição: ${d.descricao}`,
-            10,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            `Valor: R$ ${d.valor}`,
-            10,
-            y
-        );
-
-        y += 10;
-
-        if(y > 260){
+        if(y > 240){
 
             doc.addPage();
 
             y = 20;
         }
+
+        doc.setDrawColor(200);
+
+        doc.roundedRect(
+            10,
+            y,
+            190,
+            58,
+            3,
+            3
+        );
+
+        doc.setFillColor(
+            243,
+            244,
+            246
+        );
+
+        doc.roundedRect(
+            10,
+            y,
+            190,
+            10,
+            3,
+            3,
+            "F"
+        );
+
+        doc.setTextColor(
+            0,
+            0,
+            0
+        );
+
+        doc.setFontSize(12);
+
+        doc.text(
+            `Despesa #${index + 1}`,
+            14,
+            y + 7
+        );
+
+        doc.setFontSize(10);
+
+        let linha = y + 18;
+
+        doc.text(
+            `Funcionário: ${d.funcionario}`,
+            14,
+            linha
+        );
+
+        linha += 6;
+
+        doc.text(
+            `Cliente: ${d.cliente}`,
+            14,
+            linha
+        );
+
+        linha += 6;
+
+        doc.text(
+            `Período: ${d.dataInicio} até ${d.dataFim}`,
+            14,
+            linha
+        );
+
+        linha += 6;
+
+        doc.text(
+            `Data Cupom: ${d.dataCupom}`,
+            14,
+            linha
+        );
+
+        linha += 6;
+
+        doc.text(
+            `Categoria: ${d.categoria}`,
+            14,
+            linha
+        );
+
+        linha += 6;
+
+        doc.text(
+            `Descrição: ${d.descricao}`,
+            14,
+            linha
+        );
+
+        linha += 6;
+
+        doc.setFontSize(11);
+
+        doc.text(
+            `Valor: R$ ${parseFloat(
+                d.valor
+            ).toFixed(2)}`,
+            14,
+            linha
+        );
+
+        if(d.imagem){
+
+            try{
+
+                doc.addImage(
+                    d.imagem,
+                    "JPEG",
+                    145,
+                    y + 15,
+                    42,
+                    32
+                );
+
+            }catch(e){
+
+                console.log(
+                    "Erro imagem"
+                );
+            }
+        }
+
+        y += 68;
+
     });
 
-    doc.save("despesas_viagem.pdf");
+    if(y > 250){
+
+        doc.addPage();
+
+        y = 20;
+    }
+
+    doc.setFillColor(
+        22,
+        163,
+        74
+    );
+
+    doc.roundedRect(
+        10,
+        y,
+        190,
+        14,
+        3,
+        3,
+        "F"
+    );
+
+    doc.setTextColor(
+        255,
+        255,
+        255
+    );
+
+    doc.setFontSize(14);
+
+    doc.text(
+        `TOTAL GERAL: R$ ${total.toFixed(2)}`,
+        14,
+        y + 9
+    );
+
+    doc.save(
+        "despesas_viagem.pdf"
+    );
 }
 
 </script>
