@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Controle de Despesas</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
@@ -16,7 +23,7 @@
 
 body{
     background:#f5f5f5;
-    padding:20px;
+    padding:15px;
 }
 
 .container{
@@ -31,10 +38,11 @@ body{
 h1{
     text-align:center;
     margin-bottom:20px;
+    font-size:28px;
 }
 
 .section-title{
-    margin-top:20px;
+    margin-top:25px;
     margin-bottom:10px;
     font-size:18px;
     font-weight:bold;
@@ -56,18 +64,21 @@ label{
     font-weight:bold;
 }
 
-input, select{
-    padding:10px;
+input,
+select{
+    padding:12px;
     border:1px solid #ccc;
     border-radius:6px;
+    font-size:16px;
 }
 
 button{
     border:none;
-    padding:12px;
+    padding:14px;
     border-radius:6px;
     cursor:pointer;
     font-weight:bold;
+    font-size:15px;
 }
 
 .primary{
@@ -75,22 +86,21 @@ button{
     color:white;
 }
 
-.primary:hover{
-    background:#0056b3;
-}
-
 .success{
     background:#28a745;
     color:white;
 }
 
-.success:hover{
-    background:#1f7a33;
-}
-
 .danger{
     background:red;
     color:white;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
 }
 
 table{
@@ -115,13 +125,6 @@ img{
     border-radius:6px;
 }
 
-.actions{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-    flex-wrap:wrap;
-}
-
 .total{
     margin-top:20px;
     font-size:22px;
@@ -131,14 +134,32 @@ img{
 
 @media(max-width:768px){
 
+    body{
+        padding:10px;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    h1{
+        font-size:22px;
+    }
+
     table{
         display:block;
         overflow-x:auto;
+        white-space:nowrap;
+    }
+
+    button{
+        width:100%;
     }
 
 }
 
 </style>
+
 </head>
 
 <body>
@@ -184,6 +205,7 @@ img{
 
     <div class="field">
         <label>Categoria</label>
+
         <select id="categoria">
             <option>Refeição</option>
             <option>Hotel</option>
@@ -196,7 +218,9 @@ img{
 
     <div class="field">
         <label>Descrição</label>
+
         <input list="historicoDescricao" type="text" id="descricao">
+
         <datalist id="historicoDescricao"></datalist>
     </div>
 
@@ -207,7 +231,13 @@ img{
 
     <div class="field">
         <label>Cupom Fiscal</label>
-        <input type="file" id="imagem" accept="image/*">
+
+        <input
+            type="file"
+            id="imagem"
+            accept="image/*"
+            capture="environment"
+        >
     </div>
 
 </div>
@@ -231,6 +261,7 @@ img{
 <table>
 
 <thead>
+
 <tr>
     <th>Funcionário</th>
     <th>Cliente</th>
@@ -242,6 +273,7 @@ img{
     <th>Cupom</th>
     <th>Ação</th>
 </tr>
+
 </thead>
 
 <tbody id="tabelaDespesas"></tbody>
@@ -257,12 +289,16 @@ img{
 <script>
 
 let despesas = JSON.parse(localStorage.getItem("despesas")) || [];
+
 let descricoes = JSON.parse(localStorage.getItem("descricoes")) || [];
 
 renderizarTabela();
+
 renderizarDescricoes();
 
 function primeiraMaiuscula(texto){
+
+    if(!texto) return "";
 
     texto = texto.toLowerCase();
 
@@ -280,6 +316,7 @@ function salvarDespesa(){
     );
 
     const dataInicio = document.getElementById("dataInicio").value;
+
     const dataFim = document.getElementById("dataFim").value;
 
     const dataCupom = document.getElementById("dataCupom").value;
@@ -306,7 +343,7 @@ function salvarDespesa(){
         return;
     }
 
-    if(!descricoes.includes(descricao)){
+    if(descricao && !descricoes.includes(descricao)){
 
         descricoes.push(descricao);
 
@@ -318,9 +355,22 @@ function salvarDespesa(){
         renderizarDescricoes();
     }
 
-    const reader = new FileReader();
+    if(imagemInput.files && imagemInput.files[0]){
 
-    reader.onload = function(){
+        comprimirImagem(
+            imagemInput.files[0],
+            function(imagemComprimida){
+
+                salvarNoArray(imagemComprimida);
+            }
+        );
+
+    }else{
+
+        salvarNoArray("");
+    }
+
+    function salvarNoArray(imagemBase64){
 
         const despesa = {
 
@@ -332,36 +382,90 @@ function salvarDespesa(){
             categoria,
             descricao,
             valor,
-            imagem: reader.result
-
+            imagem: imagemBase64
         };
 
         despesas.push(despesa);
 
-        localStorage.setItem(
-            "despesas",
-            JSON.stringify(despesas)
-        );
+        try{
+
+            localStorage.setItem(
+                "despesas",
+                JSON.stringify(despesas)
+            );
+
+        }catch(e){
+
+            alert(
+                "Memória cheia. Exclua algumas despesas antigas."
+            );
+
+            despesas.pop();
+
+            return;
+        }
 
         renderizarTabela();
 
         limparFormulario();
     }
 
-    if(imagemInput.files[0]){
+}
 
-        reader.readAsDataURL(imagemInput.files[0]);
+function comprimirImagem(file, callback){
 
-    }else{
+    const reader = new FileReader();
 
-        reader.onload();
-    }
+    reader.onload = function(event){
 
+        const img = new Image();
+
+        img.onload = function(){
+
+            const canvas = document.createElement("canvas");
+
+            const maxWidth = 800;
+
+            const scale =
+                maxWidth / img.width;
+
+            canvas.width = maxWidth;
+
+            canvas.height =
+                img.height * scale;
+
+            const ctx =
+                canvas.getContext("2d");
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            const compressed =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.6
+                );
+
+            callback(compressed);
+        };
+
+        img.src = event.target.result;
+    };
+
+    reader.readAsDataURL(file);
 }
 
 function renderizarDescricoes(){
 
-    const lista = document.getElementById("historicoDescricao");
+    const lista =
+        document.getElementById(
+            "historicoDescricao"
+        );
 
     lista.innerHTML = "";
 
@@ -376,13 +480,16 @@ function renderizarDescricoes(){
 
 function renderizarTabela(){
 
-    const tabela = document.getElementById("tabelaDespesas");
+    const tabela =
+        document.getElementById(
+            "tabelaDespesas"
+        );
 
     tabela.innerHTML = "";
 
     let total = 0;
 
-    despesas.forEach((despesa, index) => {
+    despesas.forEach((despesa,index)=>{
 
         total += parseFloat(despesa.valor);
 
@@ -407,7 +514,9 @@ function renderizarTabela(){
             <td>${despesa.descricao}</td>
 
             <td>
-                R$ ${parseFloat(despesa.valor).toFixed(2)}
+                R$ ${parseFloat(
+                    despesa.valor
+                ).toFixed(2)}
             </td>
 
             <td>
@@ -459,16 +568,21 @@ function removerDespesa(index){
 function limparFormulario(){
 
     document.getElementById("dataCupom").value = "";
+
     document.getElementById("descricao").value = "";
+
     document.getElementById("valor").value = "";
+
     document.getElementById("imagem").value = "";
 }
 
 function exportarExcel(){
 
-    const worksheet = XLSX.utils.json_to_sheet(despesas);
+    const worksheet =
+        XLSX.utils.json_to_sheet(despesas);
 
-    const workbook = XLSX.utils.book_new();
+    const workbook =
+        XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
         workbook,
@@ -503,7 +617,7 @@ async function exportarPDF(){
         doc.setFontSize(10);
 
         doc.text(
-            `${index + 1}. ${d.funcionario} | ${d.cliente}`,
+            `${index+1}. ${d.funcionario} | ${d.cliente}`,
             10,
             y
         );
