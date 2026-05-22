@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Controle de Despesas</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -18,8 +20,8 @@
 }
 
 body{
-    background:#f5f5f5;
-    padding:20px;
+    background:#f2f4f7;
+    padding:15px;
 }
 
 .container{
@@ -27,20 +29,23 @@ body{
     margin:auto;
     background:white;
     padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
 }
 
 h1{
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:25px;
+    color:#1f2937;
+    font-size:28px;
 }
 
 .section-title{
-    margin-top:20px;
-    margin-bottom:10px;
+    margin-top:25px;
+    margin-bottom:15px;
     font-size:18px;
     font-weight:bold;
+    color:#374151;
 }
 
 .form-grid{
@@ -55,90 +60,145 @@ h1{
 }
 
 label{
-    margin-bottom:5px;
+    margin-bottom:6px;
     font-weight:bold;
+    color:#374151;
+    font-size:14px;
 }
 
-input, select{
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:6px;
+input,
+select{
+    padding:12px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+    background:white;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#2563eb;
 }
 
 button{
     border:none;
-    padding:12px;
-    border-radius:6px;
+    padding:14px;
+    border-radius:10px;
     cursor:pointer;
     font-weight:bold;
+    transition:0.2s;
+    font-size:15px;
 }
 
 .primary{
-    background:#007bff;
+    background:#2563eb;
     color:white;
 }
 
 .primary:hover{
-    background:#0056b3;
+    background:#1d4ed8;
 }
 
 .success{
-    background:#28a745;
+    background:#16a34a;
     color:white;
 }
 
 .success:hover{
-    background:#1f7a33;
+    background:#15803d;
 }
 
 .danger{
-    background:red;
+    background:#dc2626;
     color:white;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-}
-
-table th,
-table td{
-    border:1px solid #ddd;
-    padding:10px;
-    text-align:center;
-}
-
-table th{
-    background:#efefef;
-}
-
-img{
-    width:70px;
-    border-radius:6px;
+    padding:8px 12px;
 }
 
 .actions{
     display:flex;
     gap:10px;
-    margin-top:20px;
+    margin-top:25px;
     flex-wrap:wrap;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+    margin-top:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1000px;
+}
+
+table th,
+table td{
+    border:1px solid #e5e7eb;
+    padding:12px;
+    text-align:center;
+    font-size:14px;
+}
+
+table th{
+    background:#f3f4f6;
+}
+
+.preview-img{
+    width:80px;
+    border-radius:8px;
 }
 
 .total{
     margin-top:20px;
-    font-size:22px;
+    font-size:24px;
     text-align:right;
     font-weight:bold;
+    color:#111827;
+}
+
+.info-save{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+    color:#1e40af;
+    font-size:14px;
 }
 
 @media(max-width:768px){
 
-    table{
-        display:block;
-        overflow-x:auto;
+    body{
+        padding:10px;
     }
 
+    .container{
+        padding:15px;
+    }
+
+    h1{
+        font-size:22px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+
+    table th,
+    table td{
+        font-size:13px;
+        padding:10px;
+    }
+
+    .preview-img{
+        width:65px;
+    }
 }
 
 </style>
@@ -149,6 +209,10 @@ img{
 <div class="container">
 
 <h1>Controle de Despesas de Viagem</h1>
+
+<div class="info-save">
+    Os dados da viagem ficam salvos automaticamente no navegador para facilitar novos lançamentos.
+</div>
 
 <div class="section-title">Dados da Viagem</div>
 
@@ -209,8 +273,14 @@ img{
     </div>
 
     <div class="field">
-        <label>Cupom Fiscal</label>
-        <input type="file" id="imagem" accept="image/*">
+        <label>Cupom Fiscal / Foto</label>
+
+        <input
+            type="file"
+            id="imagem"
+            accept="image/*"
+            capture="environment"
+        >
     </div>
 
 </div>
@@ -231,9 +301,12 @@ img{
 
 </div>
 
+<div class="table-wrapper">
+
 <table>
 
 <thead>
+
 <tr>
     <th>Funcionário</th>
     <th>Cliente</th>
@@ -245,11 +318,14 @@ img{
     <th>Cupom</th>
     <th>Ação</th>
 </tr>
+
 </thead>
 
 <tbody id="tabelaDespesas"></tbody>
 
 </table>
+
+</div>
 
 <div class="total" id="total">
     Total: R$ 0,00
@@ -260,17 +336,89 @@ img{
 <script>
 
 let despesas = JSON.parse(localStorage.getItem("despesas")) || [];
-let descricoes = JSON.parse(localStorage.getItem("descricoes")) || [];
+
+let descricoes = JSON.parse(
+    localStorage.getItem("descricoes")
+) || [];
+
+carregarDadosViagem();
 
 renderizarTabela();
+
 renderizarDescricoes();
 
 function primeiraMaiuscula(texto){
+
+    if(!texto) return "";
 
     texto = texto.toLowerCase();
 
     return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
+
+function salvarDadosViagem(){
+
+    const dados = {
+
+        funcionario:
+            document.getElementById("funcionario").value,
+
+        cliente:
+            document.getElementById("cliente").value,
+
+        dataInicio:
+            document.getElementById("dataInicio").value,
+
+        dataFim:
+            document.getElementById("dataFim").value,
+
+        dataCupom:
+            document.getElementById("dataCupom").value
+    };
+
+    localStorage.setItem(
+        "dadosViagem",
+        JSON.stringify(dados)
+    );
+}
+
+function carregarDadosViagem(){
+
+    const dados = JSON.parse(
+        localStorage.getItem("dadosViagem")
+    );
+
+    if(!dados) return;
+
+    document.getElementById("funcionario").value =
+        dados.funcionario || "";
+
+    document.getElementById("cliente").value =
+        dados.cliente || "";
+
+    document.getElementById("dataInicio").value =
+        dados.dataInicio || "";
+
+    document.getElementById("dataFim").value =
+        dados.dataFim || "";
+
+    document.getElementById("dataCupom").value =
+        dados.dataCupom || "";
+}
+
+[
+    "funcionario",
+    "cliente",
+    "dataInicio",
+    "dataFim",
+    "dataCupom"
+].forEach(id => {
+
+    document
+        .getElementById(id)
+        .addEventListener("change", salvarDadosViagem);
+
+});
 
 function salvarDespesa(){
 
@@ -282,20 +430,27 @@ function salvarDespesa(){
         document.getElementById("cliente").value
     );
 
-    const dataInicio = document.getElementById("dataInicio").value;
-    const dataFim = document.getElementById("dataFim").value;
+    const dataInicio =
+        document.getElementById("dataInicio").value;
 
-    const dataCupom = document.getElementById("dataCupom").value;
+    const dataFim =
+        document.getElementById("dataFim").value;
 
-    const categoria = document.getElementById("categoria").value;
+    const dataCupom =
+        document.getElementById("dataCupom").value;
+
+    const categoria =
+        document.getElementById("categoria").value;
 
     const descricao = primeiraMaiuscula(
         document.getElementById("descricao").value
     );
 
-    const valor = document.getElementById("valor").value;
+    const valor =
+        document.getElementById("valor").value;
 
-    const imagemInput = document.getElementById("imagem");
+    const imagemInput =
+        document.getElementById("imagem");
 
     if(
         !funcionario ||
@@ -309,7 +464,12 @@ function salvarDespesa(){
         return;
     }
 
-    if(!descricoes.includes(descricao)){
+    salvarDadosViagem();
+
+    if(
+        descricao &&
+        !descricoes.includes(descricao)
+    ){
 
         descricoes.push(descricao);
 
@@ -335,8 +495,7 @@ function salvarDespesa(){
             categoria,
             descricao,
             valor,
-            imagem: reader.result
-
+            imagem: reader.result || ""
         };
 
         despesas.push(despesa);
@@ -349,22 +508,26 @@ function salvarDespesa(){
         renderizarTabela();
 
         limparFormulario();
-    }
+    };
 
     if(imagemInput.files[0]){
 
-        reader.readAsDataURL(imagemInput.files[0]);
+        reader.readAsDataURL(
+            imagemInput.files[0]
+        );
 
     }else{
 
         reader.onload();
     }
-
 }
 
 function renderizarDescricoes(){
 
-    const lista = document.getElementById("historicoDescricao");
+    const lista =
+        document.getElementById(
+            "historicoDescricao"
+        );
 
     lista.innerHTML = "";
 
@@ -374,18 +537,20 @@ function renderizarDescricoes(){
             <option value="${item}">
         `;
     });
-
 }
 
 function renderizarTabela(){
 
-    const tabela = document.getElementById("tabelaDespesas");
+    const tabela =
+        document.getElementById(
+            "tabelaDespesas"
+        );
 
     tabela.innerHTML = "";
 
     let total = 0;
 
-    despesas.forEach((despesa, index) => {
+    despesas.forEach((despesa,index)=>{
 
         total += parseFloat(despesa.valor);
 
@@ -410,15 +575,22 @@ function renderizarTabela(){
             <td>${despesa.descricao}</td>
 
             <td>
-                R$ ${parseFloat(despesa.valor).toFixed(2)}
+                R$ ${parseFloat(
+                    despesa.valor
+                ).toFixed(2)}
             </td>
 
             <td>
 
                 ${
                     despesa.imagem
-                    ? `<img src="${despesa.imagem}">`
-                    : `Sem imagem`
+                    ? `
+                    <img
+                        class="preview-img"
+                        src="${despesa.imagem}"
+                    >
+                    `
+                    : "Sem imagem"
                 }
 
             </td>
@@ -456,22 +628,24 @@ function removerDespesa(index){
 
         renderizarTabela();
     }
-
 }
 
 function limparFormulario(){
 
-    document.getElementById("dataCupom").value = "";
     document.getElementById("descricao").value = "";
+
     document.getElementById("valor").value = "";
+
     document.getElementById("imagem").value = "";
 }
 
 function exportarExcel(){
 
-    const worksheet = XLSX.utils.json_to_sheet(despesas);
+    const worksheet =
+        XLSX.utils.json_to_sheet(despesas);
 
-    const workbook = XLSX.utils.book_new();
+    const workbook =
+        XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
         workbook,
@@ -559,7 +733,6 @@ async function exportarPDF(){
 
             y = 20;
         }
-
     });
 
     doc.save("despesas_viagem.pdf");
