@@ -1,454 +1,1259 @@
-# Arquivo HTML Completo Corrigido
 
-Substitua a seção de DESPESAS do seu arquivo atual por esta versão abaixo.
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2536;
+    --bg4: #252d3d;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --text2: #9aa0b4;
+    --text3: #5c6478;
+    --blue: #3b82f6;
+    --blue2: #1d4ed8;
+    --green: #22c55e;
+    --green2: #15803d;
+    --amber: #f59e0b;
+    --amber2: #b45309;
+    --red: #ef4444;
+    --red2: #b91c1c;
+    --purple: #a855f7;
+    --teal: #14b8a6;
+    --accent: #4f8ef7;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  
+  /* SIDEBAR */
+  .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; }
+  .sidebar-logo { padding: 20px 18px 16px; border-bottom: 1px solid var(--border); }
+  .logo-badge { background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 8px; }
+  .logo-text { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: 0.3px; }
+  .logo-sub { font-size: 10px; color: var(--text3); letter-spacing: 0.5px; text-transform: uppercase; }
+  .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+  .nav-section { font-size: 9px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; padding: 12px 8px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text2); transition: all 0.15s; margin-bottom: 2px; }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .nav-icon { font-size: 16px; width: 18px; flex-shrink: 0; }
+  .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 600; }
+  .sidebar-user { padding: 14px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0; }
+  .user-name { font-size: 13px; font-weight: 500; }
+  .user-role { font-size: 11px; color: var(--text3); }
 
-```html
-<div class="page" id="page-despesas">
+  /* MAIN */
+  .main { margin-left: 220px; min-height: 100vh; display: flex; flex-direction: column; }
+  .topbar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 50; }
+  .topbar-title { font-size: 16px; font-weight: 600; flex: 1; }
+  .topbar-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+  .topbar-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: transparent; color: var(--text2); font-size: 12px; cursor: pointer; transition: all 0.15s; }
+  .topbar-btn:hover { background: var(--bg3); color: var(--text); }
+  .topbar-btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .topbar-btn.primary:hover { background: var(--blue2); }
+  .content { padding: 24px; flex: 1; }
+  .page { display: none; }
+  .page.active { display: block; }
 
-  <div class="section-title">
-    Controle de Despesas de Viagem
+  /* CARDS */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+  /* METRIC */
+  .metric { background: var(--bg3); border-radius: var(--radius); padding: 16px 20px; }
+  .metric-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .metric-value { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .metric-delta { font-size: 11px; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .badge-amber { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .badge-red { background: rgba(239,68,68,0.15); color: #f87171; }
+  .badge-purple { background: rgba(168,85,247,0.15); color: #c084fc; }
+  .badge-teal { background: rgba(20,184,166,0.15); color: #2dd4bf; }
+  .badge-gray { background: rgba(255,255,255,0.08); color: var(--text2); }
+
+  /* PROGRESS */
+  .progress-bar { background: var(--bg4); border-radius: 4px; height: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+  /* TABLE */
+  .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  .table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .table tr:last-child td { border-bottom: none; }
+  .table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* KANBAN */
+  .kanban { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; min-width: 0; overflow-x: auto; padding-bottom: 8px; }
+  .kanban-col { background: var(--bg3); border-radius: var(--radius-lg); padding: 14px; min-height: 400px; display: flex; flex-direction: column; gap: 10px; }
+  .kanban-col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .kanban-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kanban-count { font-size: 11px; background: var(--bg4); color: var(--text3); padding: 2px 8px; border-radius: 10px; }
+  .kanban-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; cursor: pointer; transition: all 0.15s; }
+  .kanban-card:hover { border-color: var(--blue); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(59,130,246,0.12); }
+  .kanban-card-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .kanban-card-client { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+  .kanban-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+  .kanban-due { font-size: 10px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+  .kanban-avatar { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; }
+
+  /* PRIORITY DOT */
+  .prio-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .prio-high { background: var(--red); }
+  .prio-med { background: var(--amber); }
+  .prio-low { background: var(--green); }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 14px; padding-bottom: 20px; position: relative; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; z-index: 1; }
+  .tl-line { width: 2px; flex: 1; background: var(--border); margin-top: 4px; }
+  .tl-content { flex: 1; padding-top: 4px; }
+  .tl-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .tl-meta { font-size: 11px; color: var(--text3); }
+
+  /* FORM */
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; display: block; }
+  .form-input { width: 100%; padding: 9px 12px; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); font-size: 13px; outline: none; transition: border-color 0.15s; font-family: inherit; }
+  .form-input:focus { border-color: var(--blue); }
+  .form-select { width: 100%; padding: 9px 12px; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); font-size: 13px; outline: none; cursor: pointer; font-family: inherit; }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto; }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-size: 16px; font-weight: 700; }
+  .modal-close { width: 28px; height: 28px; border-radius: 6px; background: transparent; border: 1px solid var(--border2); color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .modal-close:hover { background: var(--bg3); }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+  .btn { padding: 8px 18px; border-radius: var(--radius); border: 1px solid var(--border2); background: transparent; color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .btn:hover { background: var(--bg3); color: var(--text); }
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue2); border-color: var(--blue2); }
+
+  /* CHART */
+  .mini-chart { display: flex; align-items: flex-end; gap: 4px; height: 50px; }
+  .bar-item { flex: 1; border-radius: 3px 3px 0 0; transition: opacity 0.2s; cursor: pointer; }
+  .bar-item:hover { opacity: 0.8; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; color: var(--text2); font-size: 12px; cursor: pointer; transition: all 0.15s; }
+  .filter-chip:hover, .filter-chip.active { background: rgba(59,130,246,0.15); border-color: var(--blue); color: var(--blue); }
+
+  /* NOTIFICATION DOT */
+  .notif { width: 8px; height: 8px; background: var(--red); border-radius: 50%; display: inline-block; }
+
+  /* EXPENSE */
+  .expense-cat { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .expense-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .expense-name { font-size: 13px; font-weight: 500; }
+  .expense-date { font-size: 11px; color: var(--text3); }
+  .expense-val { margin-left: auto; font-size: 14px; font-weight: 700; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .gap-4 { gap: 16px; }
+  .mb-1 { margin-bottom: 4px; }
+  .mb-2 { margin-bottom: 8px; }
+  .mb-3 { margin-bottom: 12px; }
+  .mb-4 { margin-bottom: 16px; }
+  .text-sm { font-size: 13px; }
+  .text-xs { font-size: 11px; }
+  .text-muted { color: var(--text2); }
+  .text-dim { color: var(--text3); }
+  .font-bold { font-weight: 700; }
+  .font-semi { font-weight: 600; }
+  .tag-dot::before { content: '●'; margin-right: 5px; font-size: 8px; }
+
+  /* AVATAR GROUP */
+  .avatar-group { display: flex; }
+  .avatar-group .kanban-avatar { margin-right: -6px; border: 2px solid var(--bg2); }
+
+  /* STEP LIST */
+  .step-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .step-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+  .step-check.done { background: var(--green); border-color: var(--green); color: #fff; }
+  .step-check.progress { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .step-name { flex: 1; font-size: 13px; }
+  .step-date { font-size: 11px; color: var(--text3); }
+
+  .section-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--text3); margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">IP</div>
+    <div class="logo-text">ImplantaPro</div>
+    <div class="logo-sub">SaaS · Gestão de Implantação</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active" onclick="nav('dashboard')">
+      <span class="nav-icon">◈</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="nav('kanban')">
+      <span class="nav-icon">⊞</span> Kanban
+    </div>
+    <div class="nav-item" onclick="nav('clientes')">
+      <span class="nav-icon">◎</span> Clientes
+    </div>
+    <div class="nav-section">Operacional</div>
+    <div class="nav-item" onclick="nav('cronograma')">
+      <span class="nav-icon">⊡</span> Cronograma
+    </div>
+    <div class="nav-item" onclick="nav('treinamentos')">
+      <span class="nav-icon">◻</span> Treinamentos
+    </div>
+    <div class="nav-item" onclick="nav('relatorio')">
+      <span class="nav-icon">⊠</span> Relatório Diário
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-section">Financeiro</div>
+    <div class="nav-item" onclick="nav('despesas')">
+      <span class="nav-icon">◈</span> Despesas
+    </div>
+    <div class="nav-section">Configurações</div>
+    <div class="nav-item" onclick="nav('configuracoes')">
+      <span class="nav-icon">⚙</span> Configurações
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar">LM</div>
+    <div>
+      <div class="user-name">Lucas Mendes</div>
+      <div class="user-role">Implantador Sênior</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR (dinâmico) -->
+  <div class="topbar" id="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+    </div>
+    <button class="topbar-btn" onclick="openModal('modal-notif')">🔔 <span class="notif"></span></button>
+    <button class="topbar-btn primary" id="topbar-action" onclick="topbarAction()">+ Novo Cliente</button>
   </div>
 
-  <div class="section-sub">
-    Registre despesas e anexe múltiplos cupons fiscais
-  </div>
+  <!-- CONTENT -->
+  <div class="content">
 
-  <div class="grid-2">
+    <!-- ===== DASHBOARD ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="section-title">Visão Geral</div>
+      <div class="section-sub">Resumo operacional — semana atual</div>
 
-    <div class="card">
-
-      <div class="card-title">
-        Nova Despesa
+      <div class="grid-4 mb-4">
+        <div class="metric">
+          <div class="metric-label">Clientes Ativos</div>
+          <div class="metric-value" style="color:#60a5fa">14</div>
+          <div class="metric-delta up">▲ 2 este mês</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Em Implantação</div>
+          <div class="metric-value" style="color:#4ade80">8</div>
+          <div class="metric-delta up">▲ 1 esta semana</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Etapas Atrasadas</div>
+          <div class="metric-value" style="color:#f87171">5</div>
+          <div class="metric-delta down">▼ requer atenção</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Concluídos (mês)</div>
+          <div class="metric-value" style="color:#c084fc">3</div>
+          <div class="metric-delta up">▲ 1 acima da meta</div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Cliente</label>
+      <div class="grid-2 mb-4">
+        <div class="card">
+          <div class="card-title">Implantações Ativas</div>
+          <table class="table">
+            <thead><tr>
+              <th>Cliente</th><th>Status</th><th>Progresso</th><th>Implantador</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="font-semi">Grupo Meireles SA</div><div class="text-xs text-dim">Varejo · São Paulo</div></td>
+                <td><span class="badge badge-blue">Em andamento</span></td>
+                <td><div style="width:100px"><div class="progress-bar"><div class="progress-fill" style="width:68%;background:var(--blue)"></div></div><div class="text-xs text-dim" style="margin-top:3px">68%</div></div></td>
+                <td><div class="flex items-center gap-2"><div class="kanban-avatar">LM</div><span class="text-xs">Lucas M.</span></div></td>
+              </tr>
+              <tr>
+                <td><div class="font-semi">TechNova Ltda</div><div class="text-xs text-dim">Tecnologia · Curitiba</div></td>
+                <td><span class="badge badge-amber">Atrasado</span></td>
+                <td><div style="width:100px"><div class="progress-bar"><div class="progress-fill" style="width:42%;background:var(--amber)"></div></div><div class="text-xs text-dim" style="margin-top:3px">42%</div></div></td>
+                <td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:linear-gradient(135deg,#22c55e,#14b8a6)">PR</div><span class="text-xs">Paula R.</span></div></td>
+              </tr>
+              <tr>
+                <td><div class="font-semi">Construtora Zenith</div><div class="text-xs text-dim">Construção · BH</div></td>
+                <td><span class="badge badge-green">No prazo</span></td>
+                <td><div style="width:100px"><div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--green)"></div></div><div class="text-xs text-dim" style="margin-top:3px">85%</div></div></td>
+                <td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div><span class="text-xs">Marina F.</span></div></td>
+              </tr>
+              <tr>
+                <td><div class="font-semi">Farmácia Saúde+</div><div class="text-xs text-dim">Saúde · Campinas</div></td>
+                <td><span class="badge badge-blue">Em andamento</span></td>
+                <td><div style="width:100px"><div class="progress-bar"><div class="progress-fill" style="width:30%;background:var(--blue)"></div></div><div class="text-xs text-dim" style="margin-top:3px">30%</div></div></td>
+                <td><div class="flex items-center gap-2"><div class="kanban-avatar">LM</div><span class="text-xs">Lucas M.</span></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <select class="form-select" id="despesaCliente">
-          <option>Grupo Meireles</option>
-          <option>TechNova</option>
+        <div class="flex flex-col gap-4">
+          <div class="card">
+            <div class="card-title">Agenda Hoje — 22/05</div>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot" style="background:rgba(59,130,246,0.2);color:var(--blue)">📋</div><div class="tl-line"></div></div>
+                <div class="tl-content"><div class="tl-title">Treinamento Financeiro</div><div class="tl-meta">Grupo Meireles · 09:00 – 12:00 · <span style="color:var(--blue)">Em andamento</span></div></div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot" style="background:rgba(245,158,11,0.2);color:var(--amber)">⚡</div><div class="tl-line"></div></div>
+                <div class="tl-content"><div class="tl-title">Parametrização do Sistema</div><div class="tl-meta">TechNova · 14:00 – 17:00 · <span style="color:var(--amber)">Pendente</span></div></div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-left"><div class="tl-dot" style="background:rgba(34,197,94,0.2);color:var(--green)">✓</div></div>
+                <div class="tl-content"><div class="tl-title">Relatório Diário — Zenith</div><div class="tl-meta">Concluído · 18:30 · PDF gerado</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Custos de Viagem — Maio 2025</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px">
+              <div><div style="font-size:26px;font-weight:700;color:#fbbf24">R$ 3.840</div><div class="text-xs text-dim">de R$ 5.000 de orçamento</div></div>
+              <div class="mini-chart">
+                <div class="bar-item" style="height:30%;background:rgba(59,130,246,0.5)"></div>
+                <div class="bar-item" style="height:55%;background:rgba(59,130,246,0.5)"></div>
+                <div class="bar-item" style="height:40%;background:rgba(59,130,246,0.5)"></div>
+                <div class="bar-item" style="height:70%;background:rgba(59,130,246,0.5)"></div>
+                <div class="bar-item" style="height:90%;background:rgba(245,158,11,0.6)"></div>
+                <div class="bar-item" style="height:60%;background:rgba(59,130,246,0.5)"></div>
+                <div class="bar-item" style="height:45%;background:rgba(59,130,246,0.5)"></div>
+              </div>
+            </div>
+            <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:76.8%;background:linear-gradient(90deg,var(--blue),var(--amber))"></div></div>
+            <div class="text-xs text-dim" style="margin-top:6px">76.8% do orçamento utilizado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Indicadores de Desempenho</div>
+        <div class="grid-4">
+          <div>
+            <div class="text-xs text-dim mb-1">Tempo médio de implantação</div>
+            <div style="font-size:22px;font-weight:700;color:var(--teal)">47 dias</div>
+            <div class="text-xs up">▼ 3 dias vs. trimestre passado</div>
+          </div>
+          <div>
+            <div class="text-xs text-dim mb-1">Taxa de treinamentos aprovados</div>
+            <div style="font-size:22px;font-weight:700;color:var(--green)">87%</div>
+            <div class="text-xs up">▲ 4% vs. mês passado</div>
+          </div>
+          <div>
+            <div class="text-xs text-dim mb-1">Etapas concluídas no prazo</div>
+            <div style="font-size:22px;font-weight:700;color:var(--blue)">73%</div>
+            <div class="text-xs text-muted">Meta: 80%</div>
+          </div>
+          <div>
+            <div class="text-xs text-dim mb-1">NPS de Implantação</div>
+            <div style="font-size:22px;font-weight:700;color:var(--purple)">+72</div>
+            <div class="text-xs up">▲ Excelente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== KANBAN ===== -->
+    <div class="page" id="page-kanban">
+      <div class="section-title">Kanban de Etapas</div>
+      <div class="section-sub">Arraste os cartões entre colunas para atualizar o status</div>
+      <div class="filter-bar">
+        <select class="form-select" style="width:auto;padding:6px 12px;font-size:12px">
+          <option>Todos os clientes</option>
+          <option>Grupo Meireles SA</option>
+          <option>TechNova Ltda</option>
           <option>Construtora Zenith</option>
         </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Categoria</label>
-
-        <select class="form-select" id="despesaCategoria">
-          <option>Combustível</option>
-          <option>Hotel</option>
-          <option>Alimentação</option>
-          <option>Pedágio</option>
-          <option>Uber / Táxi</option>
+        <select class="form-select" style="width:auto;padding:6px 12px;font-size:12px">
+          <option>Todos os implantadores</option>
+          <option>Lucas Mendes</option>
+          <option>Paula Rodrigues</option>
         </select>
+        <div class="filter-chip active">Todos</div>
+        <div class="filter-chip">Alta prioridade</div>
+        <div class="filter-chip">Atrasados</div>
+        <div class="filter-chip">Esta semana</div>
       </div>
-
-      <div class="form-group">
-        <label class="form-label">Valor</label>
-
-        <input
-          type="number"
-          class="form-input"
-          id="despesaValor"
-          placeholder="0,00"
-        >
+      <div class="kanban">
+        <!-- PENDENTE -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title" style="color:var(--text3)">◌ Pendente</div>
+            <div class="kanban-count">4</div>
+          </div>
+          <div class="kanban-card" onclick="openModal('modal-etapa')">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-low"></div><span class="badge badge-gray" style="font-size:10px">Farmácia Saúde+</span></div>
+            <div class="kanban-card-title">Configuração Inicial</div>
+            <div class="kanban-card-client">Análise do ambiente e infraestrutura</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due">📅 27/05</div>
+              <div class="kanban-avatar">LM</div>
+            </div>
+          </div>
+          <div class="kanban-card" onclick="openModal('modal-etapa')">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-med"></div><span class="badge badge-gray" style="font-size:10px">TechNova Ltda</span></div>
+            <div class="kanban-card-title">Cadastro de Produtos</div>
+            <div class="kanban-card-client">Importação do catálogo base</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due" style="color:var(--red)">📅 24/05 ⚠</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#22c55e,#14b8a6)">PR</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-low"></div><span class="badge badge-gray" style="font-size:10px">Grupo Meireles</span></div>
+            <div class="kanban-card-title">Go-live Planejamento</div>
+            <div class="kanban-card-client">Checklist pré-abertura</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due">📅 15/06</div>
+              <div class="kanban-avatar">LM</div>
+            </div>
+          </div>
+        </div>
+        <!-- EM ANDAMENTO -->
+        <div class="kanban-col" style="border:1px solid rgba(59,130,246,0.2)">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title" style="color:var(--blue)">⟳ Em Andamento</div>
+            <div class="kanban-count">5</div>
+          </div>
+          <div class="kanban-card" style="border-color:rgba(59,130,246,0.3)" onclick="openModal('modal-etapa')">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-high"></div><span class="badge badge-blue" style="font-size:10px">Grupo Meireles</span></div>
+            <div class="kanban-card-title">Treinamento Financeiro</div>
+            <div class="kanban-card-client">Módulo contas a pagar/receber</div>
+            <div style="margin:8px 0"><div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--blue)"></div></div></div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due">📅 22/05</div>
+              <div class="flex items-center gap-1">
+                <div class="kanban-avatar">LM</div>
+                <div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);margin-left:-6px;border:2px solid var(--bg2)">MF</div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-med"></div><span class="badge badge-blue" style="font-size:10px">Construtora Zenith</span></div>
+            <div class="kanban-card-title">Treinamento Operacional</div>
+            <div class="kanban-card-client">Equipe de compras e estoque</div>
+            <div style="margin:8px 0"><div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--green)"></div></div></div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due">📅 23/05</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-med"></div><span class="badge badge-blue" style="font-size:10px">TechNova Ltda</span></div>
+            <div class="kanban-card-title">Parametrização</div>
+            <div class="kanban-card-client">Configuração de regras fiscais</div>
+            <div style="margin:8px 0"><div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--amber)"></div></div></div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due" style="color:var(--red)">📅 20/05 ⚠</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#22c55e,#14b8a6)">PR</div>
+            </div>
+          </div>
+        </div>
+        <!-- CONCLUÍDO -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title" style="color:var(--green)">✓ Concluído</div>
+            <div class="kanban-count">7</div>
+          </div>
+          <div class="kanban-card">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-low"></div><span class="badge badge-green" style="font-size:10px">Construtora Zenith</span></div>
+            <div class="kanban-card-title">Configuração Inicial</div>
+            <div class="kanban-card-client">Ambiente configurado com sucesso</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due">✓ 10/05</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-low"></div><span class="badge badge-green" style="font-size:10px">Construtora Zenith</span></div>
+            <div class="kanban-card-title">Cadastro de Produtos</div>
+            <div class="kanban-card-client">1.240 produtos importados</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due">✓ 15/05</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div>
+            </div>
+          </div>
+        </div>
+        <!-- ATRASADO -->
+        <div class="kanban-col" style="border:1px solid rgba(239,68,68,0.2)">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title" style="color:var(--red)">⚠ Atrasado</div>
+            <div class="kanban-count">3</div>
+          </div>
+          <div class="kanban-card" style="border-color:rgba(239,68,68,0.3)" onclick="openModal('modal-etapa')">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-high"></div><span class="badge badge-red" style="font-size:10px">TechNova Ltda</span></div>
+            <div class="kanban-card-title">Cadastro de Usuários</div>
+            <div class="kanban-card-client">Permissões e perfis de acesso</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due" style="color:var(--red)">📅 18/05 — 4d</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#22c55e,#14b8a6)">PR</div>
+            </div>
+          </div>
+          <div class="kanban-card" style="border-color:rgba(239,68,68,0.3)">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot prio-high"></div><span class="badge badge-red" style="font-size:10px">Farmácia Saúde+</span></div>
+            <div class="kanban-card-title">Treinamento Financeiro</div>
+            <div class="kanban-card-client">Reagendado pelo cliente</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due" style="color:var(--red)">📅 16/05 — 6d</div>
+              <div class="kanban-avatar">LM</div>
+            </div>
+          </div>
+        </div>
+        <!-- GO-LIVE -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title" style="color:var(--purple)">🚀 Go-Live</div>
+            <div class="kanban-count">2</div>
+          </div>
+          <div class="kanban-card" style="border-color:rgba(168,85,247,0.3)">
+            <div class="flex items-center gap-2 mb-2"><div class="prio-dot" style="background:var(--purple)"></div><span class="badge badge-purple" style="font-size:10px">Construtora Zenith</span></div>
+            <div class="kanban-card-title">Go-Live Agendado</div>
+            <div class="kanban-card-client">Abertura operacional — 01/06</div>
+            <div class="kanban-card-footer">
+              <div class="kanban-due" style="color:var(--purple)">📅 01/06</div>
+              <div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="form-group">
-        <label class="form-label">Observações</label>
-
-        <textarea
-          class="form-input form-textarea"
-          id="despesaObs"
-          placeholder="Digite observações"
-        ></textarea>
-      </div>
-
-      <div class="form-group">
-
-        <label class="form-label">
-          Fotos do Cupom Fiscal
-        </label>
-
-        <div id="upload-container"></div>
-
-        <div
-          id="previewFotos"
-          style="
-            margin-top:16px;
-            display:grid;
-            grid-template-columns:
-            repeat(auto-fill,minmax(120px,1fr));
-            gap:12px;
-          "
-        ></div>
-
-      </div>
-
-      <button
-        class="btn btn-primary"
-        style="width:100%"
-        onclick="salvarDespesa()"
-      >
-        💾 Salvar Despesa
-      </button>
-
     </div>
 
-    <div class="card">
-
-      <div class="card-title">
-        Despesas Salvas
+    <!-- ===== CLIENTES ===== -->
+    <div class="page" id="page-clientes">
+      <div class="section-title">Gestão de Clientes</div>
+      <div class="section-sub">Cadastro e acompanhamento de todos os clientes</div>
+      <div class="filter-bar">
+        <input class="form-input" style="width:220px" placeholder="🔍 Buscar cliente...">
+        <div class="filter-chip active">Todos (14)</div>
+        <div class="filter-chip">Implantando (8)</div>
+        <div class="filter-chip">Concluídos (3)</div>
+        <div class="filter-chip">Atrasados (3)</div>
       </div>
-
-      <div
-        id="listaDespesas"
-        style="
-          display:flex;
-          flex-direction:column;
-          gap:12px;
-        "
-      ></div>
-
+      <div class="card">
+        <table class="table">
+          <thead><tr>
+            <th>Empresa</th><th>Segmento</th><th>Responsável</th><th>Implantador</th><th>Status</th><th>Progresso</th><th>Próxima Etapa</th><th></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="font-semi">Grupo Meireles SA</div><div class="text-xs text-dim">📍 São Paulo, SP</div></td>
+              <td><span class="badge badge-blue">Varejo</span></td>
+              <td><div class="text-sm">Ana Meireles</div><div class="text-xs text-dim">ana@meireles.com.br</div></td>
+              <td><div class="flex items-center gap-2"><div class="kanban-avatar">LM</div><span class="text-sm">Lucas M.</span></div></td>
+              <td><span class="badge badge-blue">Em andamento</span></td>
+              <td><div><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:68%;background:var(--blue)"></div></div><div class="text-xs text-dim" style="margin-top:2px">68% · Dia 32/47</div></div></td>
+              <td><div class="text-sm">Treinamento Financeiro</div><div class="text-xs text-dim">22/05/2025</div></td>
+              <td><button class="btn" onclick="openModal('modal-cliente-detalhe')" style="font-size:11px;padding:5px 10px">Ver Detalhe</button></td>
+            </tr>
+            <tr>
+              <td><div class="font-semi">TechNova Ltda</div><div class="text-xs text-dim">📍 Curitiba, PR</div></td>
+              <td><span class="badge badge-teal">Tecnologia</span></td>
+              <td><div class="text-sm">Roberto Tech</div><div class="text-xs text-dim">roberto@technova.com</div></td>
+              <td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:linear-gradient(135deg,#22c55e,#14b8a6)">PR</div><span class="text-sm">Paula R.</span></div></td>
+              <td><span class="badge badge-amber">Atrasado</span></td>
+              <td><div><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:42%;background:var(--amber)"></div></div><div class="text-xs text-dim" style="margin-top:2px">42% · Dia 28/47</div></div></td>
+              <td><div class="text-sm" style="color:var(--red)">Cadastro de Usuários ⚠</div><div class="text-xs text-dim">Venceu 18/05</div></td>
+              <td><button class="btn" style="font-size:11px;padding:5px 10px">Ver Detalhe</button></td>
+            </tr>
+            <tr>
+              <td><div class="font-semi">Construtora Zenith</div><div class="text-xs text-dim">📍 Belo Horizonte, MG</div></td>
+              <td><span class="badge badge-amber">Construção</span></td>
+              <td><div class="text-sm">Márcio Zenith</div><div class="text-xs text-dim">marcio@zenith.eng.br</div></td>
+              <td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div><span class="text-sm">Marina F.</span></div></td>
+              <td><span class="badge badge-green">No prazo</span></td>
+              <td><div><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:85%;background:var(--green)"></div></div><div class="text-xs text-dim" style="margin-top:2px">85% · Dia 40/47</div></div></td>
+              <td><div class="text-sm" style="color:var(--purple)">Go-Live 🚀</div><div class="text-xs text-dim">01/06/2025</div></td>
+              <td><button class="btn" style="font-size:11px;padding:5px 10px">Ver Detalhe</button></td>
+            </tr>
+            <tr>
+              <td><div class="font-semi">Farmácia Saúde+</div><div class="text-xs text-dim">📍 Campinas, SP</div></td>
+              <td><span class="badge badge-purple">Saúde</span></td>
+              <td><div class="text-sm">Fernanda Lima</div><div class="text-xs text-dim">fl@saudemais.com.br</div></td>
+              <td><div class="flex items-center gap-2"><div class="kanban-avatar">LM</div><span class="text-sm">Lucas M.</span></div></td>
+              <td><span class="badge badge-blue">Em andamento</span></td>
+              <td><div><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:30%;background:var(--blue)"></div></div><div class="text-xs text-dim" style="margin-top:2px">30% · Dia 14/47</div></div></td>
+              <td><div class="text-sm">Configuração Inicial</div><div class="text-xs text-dim">27/05/2025</div></td>
+              <td><button class="btn" style="font-size:11px;padding:5px 10px">Ver Detalhe</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
+    <!-- ===== CRONOGRAMA ===== -->
+    <div class="page" id="page-cronograma">
+      <div class="section-title">Planejamento de Cronograma</div>
+      <div class="section-sub">O sistema distribui automaticamente as etapas nos dias disponíveis</div>
+      <div class="grid-2 mb-4">
+        <div class="card">
+          <div class="card-title">Novo Cronograma Automático</div>
+          <div class="form-group">
+            <label class="form-label">Cliente</label>
+            <select class="form-select">
+              <option>Grupo Meireles SA</option>
+              <option>TechNova Ltda</option>
+              <option>Farmácia Saúde+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dias presenciais (selecione múltiplos)</label>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;border:1px solid var(--border2);font-size:11px;color:var(--text3)">Seg</div>
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;background:rgba(59,130,246,0.2);border:1px solid var(--blue);font-size:11px;color:var(--blue);cursor:pointer">Ter</div>
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;background:rgba(59,130,246,0.2);border:1px solid var(--blue);font-size:11px;color:var(--blue);cursor:pointer">Qua</div>
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;border:1px solid var(--border2);font-size:11px;color:var(--text3)">Qui</div>
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;background:rgba(59,130,246,0.2);border:1px solid var(--blue);font-size:11px;color:var(--blue);cursor:pointer">Sex</div>
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;border:1px solid var(--border2);font-size:11px;color:var(--text3)">Sáb</div>
+              <div style="text-align:center;padding:8px 4px;border-radius:8px;border:1px solid var(--border2);font-size:11px;color:var(--text3)">Dom</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Período</label>
+            <div class="flex gap-2">
+              <input type="date" class="form-input" value="2025-05-27">
+              <input type="date" class="form-input" value="2025-06-13">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Horário de início das atividades</label>
+            <div class="flex gap-2">
+              <input type="time" class="form-input" value="08:00">
+              <input type="time" class="form-input" value="17:00">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="openModal('modal-cronograma-gerado')">⚡ Gerar Cronograma Automático</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Cronograma Atual — Maio/Jun</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--green)">
+              <div style="font-size:24px;font-weight:700;color:var(--green);min-width:44px;text-align:center">22<div style="font-size:10px;font-weight:400;color:var(--text3)">Mai</div></div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">Treinamento Financeiro</div>
+                <div class="text-xs text-dim">Grupo Meireles · 09:00–12:00</div>
+                <div class="text-xs text-dim">Partic.: Ana M., João F., Carlos R.</div>
+              </div>
+              <span class="badge badge-green">Hoje</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--amber)">
+              <div style="font-size:24px;font-weight:700;color:var(--amber);min-width:44px;text-align:center">23<div style="font-size:10px;font-weight:400;color:var(--text3)">Mai</div></div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">Treinamento Operacional</div>
+                <div class="text-xs text-dim">Construtora Zenith · 08:00–17:00</div>
+                <div class="text-xs text-dim">Partic.: Equipe de compras (5 pessoas)</div>
+              </div>
+              <span class="badge badge-amber">Amanhã</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--blue)">
+              <div style="font-size:24px;font-weight:700;color:var(--blue);min-width:44px;text-align:center">27<div style="font-size:10px;font-weight:400;color:var(--text3)">Mai</div></div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">Configuração Inicial + Cadastro</div>
+                <div class="text-xs text-dim">Farmácia Saúde+ · 08:00–17:00</div>
+                <div class="text-xs text-dim">2 etapas agendadas neste dia</div>
+              </div>
+              <span class="badge badge-blue">Planejado</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--purple)">
+              <div style="font-size:24px;font-weight:700;color:var(--purple);min-width:44px;text-align:center">01<div style="font-size:10px;font-weight:400;color:var(--text3)">Jun</div></div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">🚀 Go-Live — Construtora Zenith</div>
+                <div class="text-xs text-dim">Abertura operacional completa</div>
+                <div class="text-xs text-dim">Presença: Marina F. + Supervisão</div>
+              </div>
+              <span class="badge badge-purple">Go-Live</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TREINAMENTOS ===== -->
+    <div class="page" id="page-treinamentos">
+      <div class="section-title">Controle de Treinamentos</div>
+      <div class="section-sub">Histórico, avaliações e evolução dos treinados</div>
+      <div class="grid-2 mb-4">
+        <div class="card">
+          <div class="card-title">Registrar Treinamento</div>
+          <div class="form-group">
+            <label class="form-label">Cliente / Etapa</label>
+            <select class="form-select">
+              <option>Grupo Meireles — Treinamento Financeiro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Funcionário Treinado</label>
+            <input class="form-input" placeholder="Nome completo" value="Ana Carolina Meireles">
+          </div>
+          <div class="flex gap-2">
+            <div class="form-group" style="flex:1">
+              <label class="form-label">Cargo</label>
+              <input class="form-input" value="Gerente Financeiro">
+            </div>
+            <div class="form-group" style="flex:1">
+              <label class="form-label">Data</label>
+              <input type="date" class="form-input" value="2025-05-22">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nota de Avaliação (0–10)</label>
+            <div style="display:flex;align-items:center;gap:12px">
+              <input type="range" min="0" max="10" value="8" id="nota-slider" style="flex:1" oninput="document.getElementById('nota-val').textContent=this.value">
+              <span id="nota-val" style="font-size:20px;font-weight:700;color:var(--green);min-width:24px">8</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Feedback / Observações</label>
+            <textarea class="form-input form-textarea" placeholder="Pontos fortes, dificuldades, recomendações...">Funcionária demonstrou ótima compreensão do módulo. Recomenda-se reforço no processo de conciliação bancária.</textarea>
+          </div>
+          <button class="btn btn-primary" style="width:100%">✓ Registrar Treinamento</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Últimos Treinamentos Registrados</div>
+          <table class="table">
+            <thead><tr><th>Funcionário</th><th>Etapa</th><th>Nota</th><th>Data</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="text-sm font-semi">Ana C. Meireles</div><div class="text-xs text-dim">Gerente Financeiro</div></td>
+                <td><span class="badge badge-blue" style="font-size:10px">Trein. Financeiro</span></td>
+                <td><span style="color:var(--green);font-weight:700">9.0</span></td>
+                <td class="text-xs text-dim">22/05</td>
+              </tr>
+              <tr>
+                <td><div class="text-sm font-semi">João Felipe S.</div><div class="text-xs text-dim">Aux. Financeiro</div></td>
+                <td><span class="badge badge-blue" style="font-size:10px">Trein. Financeiro</span></td>
+                <td><span style="color:var(--amber);font-weight:700">6.5</span></td>
+                <td class="text-xs text-dim">22/05</td>
+              </tr>
+              <tr>
+                <td><div class="text-sm font-semi">Marcos Vinícius</div><div class="text-xs text-dim">Comprador Sênior</div></td>
+                <td><span class="badge badge-teal" style="font-size:10px">Trein. Operacional</span></td>
+                <td><span style="color:var(--green);font-weight:700">8.5</span></td>
+                <td class="text-xs text-dim">21/05</td>
+              </tr>
+              <tr>
+                <td><div class="text-sm font-semi">Carla Rodrigues</div><div class="text-xs text-dim">Estoquista</div></td>
+                <td><span class="badge badge-teal" style="font-size:10px">Trein. Operacional</span></td>
+                <td><span style="color:var(--green);font-weight:700">7.5</span></td>
+                <td class="text-xs text-dim">21/05</td>
+              </tr>
+              <tr>
+                <td><div class="text-sm font-semi">Pedro Alves</div><div class="text-xs text-dim">Caixa</div></td>
+                <td><span class="badge badge-purple" style="font-size:10px">Trein. PDV</span></td>
+                <td><span style="color:var(--red);font-weight:700">5.0</span></td>
+                <td class="text-xs text-dim">19/05</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="divider"></div>
+          <div class="flex justify-between">
+            <div><div class="text-xs text-dim">Média geral dos treinamentos</div><div style="font-size:22px;font-weight:700;color:var(--green)">7.3</div></div>
+            <div><div class="text-xs text-dim">Total de treinados (mês)</div><div style="font-size:22px;font-weight:700;color:var(--blue)">24</div></div>
+            <div><div class="text-xs text-dim">Taxa de aprovação (&gt;7)</div><div style="font-size:22px;font-weight:700;color:var(--amber)">67%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RELATÓRIO DIÁRIO ===== -->
+    <div class="page" id="page-relatorio">
+      <div class="section-title">Relatório Diário de Implantação</div>
+      <div class="section-sub">Geração automática ao final de cada dia de trabalho</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Gerar Relatório de Hoje</div>
+          <div class="form-group">
+            <label class="form-label">Cliente</label>
+            <select class="form-select"><option>Grupo Meireles SA</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Implantador Responsável</label>
+            <input class="form-input" value="Lucas Mendes">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Etapas executadas hoje</label>
+            <div style="display:flex;flex-direction:column;gap:6px;background:var(--bg3);padding:10px;border-radius:8px">
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked> Treinamento Financeiro — Contas a Pagar (3h)</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked> Configuração de Relatórios (1h)</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox"> Parametrização Fiscal (agendado)</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Participantes presentes</label>
+            <input class="form-input" value="Ana Meireles, João Felipe, Carlos Rodrigues">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Observações e pendências</label>
+            <textarea class="form-input form-textarea">- Conciliação bancária requer atenção especial (agendado para próxima visita)
+- Solicitado treinamento extra para equipe de caixa
+- Sistema integrado com sucesso ao gateway de pagamento</textarea>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="openModal('modal-pdf')">📄 Gerar PDF + Assinar Digitalmente</button>
+          <button class="btn" style="width:100%;font-size:12px">📊 Exportar para Excel</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Relatórios Salvos</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px">
+              <div style="width:40px;height:48px;background:rgba(239,68,68,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📄</div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">Relatório Diário — 21/05/2025</div>
+                <div class="text-xs text-dim">Grupo Meireles SA · Lucas M.</div>
+                <div class="text-xs" style="color:var(--green)">✓ Assinado digitalmente</div>
+              </div>
+              <button class="btn" style="font-size:11px;padding:5px 10px">⬇ PDF</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px">
+              <div style="width:40px;height:48px;background:rgba(239,68,68,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📄</div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">Relatório Diário — 19/05/2025</div>
+                <div class="text-xs text-dim">Construtora Zenith · Marina F.</div>
+                <div class="text-xs" style="color:var(--green)">✓ Assinado digitalmente</div>
+              </div>
+              <button class="btn" style="font-size:11px;padding:5px 10px">⬇ PDF</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px">
+              <div style="width:40px;height:48px;background:rgba(239,68,68,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📄</div>
+              <div style="flex:1">
+                <div class="font-semi text-sm">Relatório Diário — 16/05/2025</div>
+                <div class="text-xs text-dim">TechNova Ltda · Paula R.</div>
+                <div class="text-xs" style="color:var(--amber)">⏳ Aguardando assinatura</div>
+              </div>
+              <button class="btn" style="font-size:11px;padding:5px 10px">⬇ PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DESPESAS ===== -->
+    <div class="page" id="page-despesas">
+      <div class="section-title">Controle de Despesas de Viagem</div>
+      <div class="section-sub">Registre e gerencie todos os custos de deslocamento</div>
+      <div class="grid-3 mb-4">
+        <div class="metric"><div class="metric-label">Total Maio</div><div class="metric-value" style="color:#fbbf24">R$ 3.840</div><div class="metric-delta text-muted">Orçamento: R$ 5.000</div></div>
+        <div class="metric"><div class="metric-label">Comprovantes pendentes</div><div class="metric-value" style="color:#f87171">2</div><div class="metric-delta down">▼ Enviar comprovante fiscal</div></div>
+        <div class="metric"><div class="metric-label">Reembolso aprovado</div><div class="metric-value" style="color:#4ade80">R$ 2.190</div><div class="metric-delta up">▲ Processado</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Nova Despesa</div>
+          <div class="form-group">
+            <label class="form-label">Categoria</label>
+            <select class="form-select">
+              <option>🚗 Combustível</option>
+              <option>🏨 Hospedagem</option>
+              <option>🍽 Alimentação</option>
+              <option>🛣 Pedágio</option>
+              <option>✈ Transporte</option>
+              <option>📎 Outros</option>
+            </select>
+          </div>
+          <div class="flex gap-2">
+            <div class="form-group" style="flex:1">
+              <label class="form-label">Valor (R$)</label>
+              <input class="form-input" placeholder="0,00" value="185,40">
+            </div>
+            <div class="form-group" style="flex:1">
+              <label class="form-label">Data</label>
+              <input type="date" class="form-input" value="2025-05-22">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cliente / Projeto</label>
+            <select class="form-select"><option>Grupo Meireles SA</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Comprovante Fiscal</label>
+            <div style="border:2px dashed var(--border2);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+              <div style="font-size:24px;margin-bottom:6px">📎</div>
+              <div class="text-sm text-muted">Arraste o arquivo ou clique para upload</div>
+              <div class="text-xs text-dim">PDF, JPG, PNG — máx. 5MB</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%">+ Registrar Despesa</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Despesas do Mês</div>
+          <div class="expense-cat"><div class="expense-icon" style="background:rgba(245,158,11,0.15)">🚗</div><div><div class="expense-name">Combustível</div><div class="expense-date">Viagem SP – PR · 22/05</div></div><div class="expense-val" style="color:var(--amber)">R$ 185,40</div></div>
+          <div class="expense-cat"><div class="expense-icon" style="background:rgba(59,130,246,0.15)">🏨</div><div><div class="expense-name">Hospedagem</div><div class="expense-date">Hotel Centro Curitiba · 21/05</div></div><div class="expense-val" style="color:var(--blue)">R$ 320,00</div></div>
+          <div class="expense-cat"><div class="expense-icon" style="background:rgba(34,197,94,0.15)">🍽</div><div><div class="expense-name">Almoço</div><div class="expense-date">Restaurante do Parque · 21/05</div></div><div class="expense-val" style="color:var(--green)">R$ 68,90</div></div>
+          <div class="expense-cat"><div class="expense-icon" style="background:rgba(168,85,247,0.15)">🛣</div><div><div class="expense-name">Pedágio</div><div class="expense-date">BR-376 (ida e volta) · 20/05</div></div><div class="expense-val" style="color:var(--purple)">R$ 42,50</div></div>
+          <div class="expense-cat"><div class="expense-icon" style="background:rgba(239,68,68,0.15)">✈</div><div><div class="expense-name">Passagem Aérea</div><div class="expense-date">Curitiba – Campinas · 19/05</div></div><div class="expense-val" style="color:var(--red)">R$ 540,00</div></div>
+          <div class="divider"></div>
+          <div class="flex justify-between items-center">
+            <div class="font-semi">Total registrado:</div>
+            <div style="font-size:18px;font-weight:700;color:var(--amber)">R$ 1.156,80</div>
+          </div>
+          <button class="btn" style="width:100%;margin-top:10px;font-size:12px">📊 Exportar Relatório Excel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CONFIGURAÇÕES ===== -->
+    <div class="page" id="page-configuracoes">
+      <div class="section-title">Configurações do Sistema</div>
+      <div class="section-sub">Gestão de usuários, permissões e integrações</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Equipe de Implantação</div>
+          <table class="table">
+            <thead><tr><th>Nome</th><th>Cargo</th><th>Perfil</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><div class="flex items-center gap-2"><div class="kanban-avatar">LM</div><div><div class="text-sm font-semi">Lucas Mendes</div><div class="text-xs text-dim">lucas@empresa.com</div></div></div></td><td class="text-xs text-muted">Implantador Sênior</td><td><span class="badge badge-purple">Admin</span></td><td><span class="badge badge-green">Ativo</span></td></tr>
+              <tr><td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:linear-gradient(135deg,#22c55e,#14b8a6)">PR</div><div><div class="text-sm font-semi">Paula Rodrigues</div><div class="text-xs text-dim">paula@empresa.com</div></div></div></td><td class="text-xs text-muted">Implantadora Plena</td><td><span class="badge badge-blue">Implantador</span></td><td><span class="badge badge-green">Ativo</span></td></tr>
+              <tr><td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MF</div><div><div class="text-sm font-semi">Marina Ferreira</div><div class="text-xs text-dim">marina@empresa.com</div></div></div></td><td class="text-xs text-muted">Implantadora Plena</td><td><span class="badge badge-blue">Implantador</span></td><td><span class="badge badge-green">Ativo</span></td></tr>
+              <tr><td><div class="flex items-center gap-2"><div class="kanban-avatar" style="background:var(--bg4);color:var(--text3)">JS</div><div><div class="text-sm font-semi">Jorge Santos</div><div class="text-xs text-dim">jorge@empresa.com</div></div></div></td><td class="text-xs text-muted">Supervisor</td><td><span class="badge badge-amber">Supervisor</span></td><td><span class="badge badge-gray">Inativo</span></td></tr>
+            </tbody>
+          </table>
+          <button class="btn btn-primary" style="margin-top:12px;font-size:12px">+ Adicionar Usuário</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Integrações & APIs</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg3);border-radius:8px">
+              <div class="flex items-center gap-10">
+                <div style="font-size:20px">🔗</div>
+                <div><div class="text-sm font-semi">ERP Corporativo</div><div class="text-xs text-dim">Integração bidirecional de dados</div></div>
+              </div>
+              <span class="badge badge-amber">Em breve</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg3);border-radius:8px">
+              <div class="flex items-center gap-10">
+                <div style="font-size:20px">📧</div>
+                <div><div class="text-sm font-semi">E-mail Automático</div><div class="text-xs text-dim">Notificações via SMTP</div></div>
+              </div>
+              <span class="badge badge-green">Ativo</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg3);border-radius:8px">
+              <div class="flex items-center gap-10">
+                <div style="font-size:20px">💬</div>
+                <div><div class="text-sm font-semi">WhatsApp Business API</div><div class="text-xs text-dim">Notificações automáticas</div></div>
+              </div>
+              <span class="badge badge-amber">Configurar</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg3);border-radius:8px">
+              <div class="flex items-center gap-10">
+                <div style="font-size:20px">🔐</div>
+                <div><div class="text-sm font-semi">SSO / Google OAuth</div><div class="text-xs text-dim">Login único corporativo</div></div>
+              </div>
+              <span class="badge badge-green">Ativo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ===== MODALS ===== -->
+
+<!-- Modal Nova Etapa -->
+<div class="modal-overlay" id="modal-etapa">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📋 Detalhe da Etapa</div>
+      <button class="modal-close" onclick="closeModal('modal-etapa')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nome da Etapa</label><input class="form-input" value="Treinamento Financeiro"></div>
+      <div class="flex gap-2">
+        <div class="form-group" style="flex:1"><label class="form-label">Cliente</label><select class="form-select"><option>Grupo Meireles SA</option></select></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Responsável</label><select class="form-select"><option>Lucas Mendes</option></select></div>
+      </div>
+      <div class="flex gap-2">
+        <div class="form-group" style="flex:1"><label class="form-label">Data Prevista</label><input type="date" class="form-input" value="2025-05-22"></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Prioridade</label><select class="form-select"><option>Alta</option><option>Média</option><option>Baixa</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+          <div style="padding:8px;border-radius:8px;border:2px solid var(--blue);background:rgba(59,130,246,0.1);text-align:center;cursor:pointer;font-size:11px;color:var(--blue);font-weight:600">Em andamento</div>
+          <div style="padding:8px;border-radius:8px;border:1px solid var(--border2);text-align:center;cursor:pointer;font-size:11px;color:var(--text3)">Pendente</div>
+          <div style="padding:8px;border-radius:8px;border:1px solid var(--border2);text-align:center;cursor:pointer;font-size:11px;color:var(--text3)">Concluído</div>
+          <div style="padding:8px;border-radius:8px;border:1px solid var(--border2);text-align:center;cursor:pointer;font-size:11px;color:var(--text3)">Atrasado</div>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input form-textarea">Treinar equipe financeira no módulo de contas a pagar e receber. Incluir conciliação bancária.</textarea></div>
+      <div class="form-group"><label class="form-label">Evidências / Anexos</label>
+        <div style="border:2px dashed var(--border2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;font-size:12px;color:var(--text3)">📎 Adicionar evidência, print ou documento</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-etapa')">Cancelar</button>
+      <button class="btn btn-primary">Salvar Alterações</button>
+    </div>
   </div>
+</div>
 
+<!-- Modal Detalhe Cliente -->
+<div class="modal-overlay" id="modal-cliente-detalhe">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Grupo Meireles SA</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Varejo · São Paulo, SP · CNPJ 12.345.678/0001-90</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-cliente-detalhe')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="flex gap-3 mb-4">
+        <span class="badge badge-blue">Em andamento</span>
+        <span class="badge badge-gray">Implantador: Lucas M.</span>
+        <span class="badge badge-gray">Iniciado: 21/04/2025</span>
+      </div>
+      <div class="card-title">Etapas de Implantação</div>
+      <div class="step-item"><div class="step-check done">✓</div><div class="step-name">Configuração Inicial</div><div class="step-date">Concluído 25/04</div></div>
+      <div class="step-item"><div class="step-check done">✓</div><div class="step-name">Cadastro de Produtos</div><div class="step-date">Concluído 02/05</div></div>
+      <div class="step-item"><div class="step-check done">✓</div><div class="step-name">Parametrização</div><div class="step-date">Concluído 10/05</div></div>
+      <div class="step-item"><div class="step-check progress">⟳</div><div class="step-name" style="color:var(--blue)">Treinamento Financeiro</div><div class="step-date" style="color:var(--blue)">Em andamento · 22/05</div></div>
+      <div class="step-item"><div class="step-check"></div><div class="step-name text-muted">Treinamento Operacional</div><div class="step-date">Previsto 28/05</div></div>
+      <div class="step-item"><div class="step-check"></div><div class="step-name text-muted">Go-live</div><div class="step-date">Previsto 10/06</div></div>
+      <div class="step-item" style="border:none"><div class="step-check"></div><div class="step-name text-muted">Pós-implantação</div><div class="step-date">Previsto 20/06</div></div>
+      <div class="divider"></div>
+      <div class="flex justify-between">
+        <div><div class="text-xs text-dim">Progresso geral</div><div style="font-size:20px;font-weight:700;color:var(--blue)">68%</div></div>
+        <div><div class="text-xs text-dim">Etapas concluídas</div><div style="font-size:20px;font-weight:700;color:var(--green)">3 / 7</div></div>
+        <div><div class="text-xs text-dim">Dias restantes</div><div style="font-size:20px;font-weight:700;color:var(--amber)">19</div></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn">📄 Ver Relatórios</button>
+      <button class="btn btn-primary">✏ Editar Cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Cronograma Gerado -->
+<div class="modal-overlay" id="modal-cronograma-gerado">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">⚡ Cronograma Gerado Automaticamente</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Farmácia Saúde+ · 27/05 a 13/06 · Ter, Qua, Sex</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-cronograma-gerado')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--green)">✓ Sistema encontrou 6 etapas pendentes e distribuiu em 5 dias disponíveis</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:80px">Ter 27/05</div>
+          <div style="flex:1">
+            <div class="text-sm font-semi">08:00–10:00 · Configuração Inicial (2h)</div>
+            <div class="text-sm" style="margin-top:2px">10:30–12:30 · Cadastro de Usuários (2h)</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:80px">Qua 28/05</div>
+          <div style="flex:1">
+            <div class="text-sm font-semi">08:00–12:00 · Cadastro de Produtos (4h)</div>
+            <div class="text-sm" style="margin-top:2px">13:00–15:00 · Parametrização (2h)</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:80px">Sex 30/05</div>
+          <div style="flex:1">
+            <div class="text-sm font-semi">08:00–12:00 · Treinamento Financeiro (4h)</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);min-width:80px">Ter 03/06</div>
+          <div style="flex:1">
+            <div class="text-sm font-semi">08:00–12:00 · Treinamento Operacional (4h)</div>
+            <div class="text-sm" style="margin-top:2px">13:00–15:00 · Go-Live Planejamento (2h)</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:rgba(168,85,247,0.1);border-radius:8px;border:1px solid rgba(168,85,247,0.2)">
+          <div style="font-size:13px;font-weight:700;color:var(--purple);min-width:80px">Sex 06/06</div>
+          <div style="flex:1">
+            <div class="text-sm font-semi" style="color:var(--purple)">🚀 Go-Live — Abertura Operacional</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-cronograma-gerado')">Ajustar Manualmente</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-cronograma-gerado')">✓ Confirmar Cronograma</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal PDF -->
+<div class="modal-overlay" id="modal-pdf">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header">
+      <div class="modal-title">📄 Relatório Diário Gerado</div>
+      <button class="modal-close" onclick="closeModal('modal-pdf')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--bg3);border-radius:10px;padding:20px;font-size:12px;font-family:monospace;line-height:1.8;color:var(--text2)">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px">RELATÓRIO DE IMPLANTAÇÃO — 22/05/2025</div>
+        <div><b>Cliente:</b> Grupo Meireles SA</div>
+        <div><b>Implantador:</b> Lucas Mendes</div>
+        <div><b>Data:</b> 22/05/2025 (09:00 – 12:00)</div>
+        <div style="margin-top:10px;margin-bottom:6px;color:var(--text);font-weight:600">ETAPAS EXECUTADAS:</div>
+        <div>✓ Treinamento Financeiro — 3h</div>
+        <div>✓ Configuração de Relatórios — 1h</div>
+        <div style="margin-top:10px;margin-bottom:6px;color:var(--text);font-weight:600">PARTICIPANTES:</div>
+        <div>Ana Meireles · João Felipe · Carlos R.</div>
+        <div style="margin-top:10px;margin-bottom:6px;color:var(--text);font-weight:600">PENDÊNCIAS:</div>
+        <div>• Conciliação bancária — próxima visita</div>
+        <div>• Treinamento extra caixa — a agendar</div>
+        <div style="margin-top:16px;display:flex;justify-content:space-between">
+          <div style="text-align:center"><div style="border-top:1px solid var(--text3);padding-top:6px;width:140px">Assinatura do Cliente</div></div>
+          <div style="text-align:center"><div style="border-top:1px solid var(--text3);padding-top:6px;width:140px">Assinatura do Implantador</div></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:10px;font-size:12px;color:var(--green)">✓ Documento salvo no histórico do cliente · Link de assinatura digital enviado</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-pdf')">Fechar</button>
+      <button class="btn btn-primary">⬇ Baixar PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Notificações -->
+<div class="modal-overlay" id="modal-notif">
+  <div class="modal" style="max-width:420px;margin-top:0;align-self:flex-start;margin-top:64px">
+    <div class="modal-header"><div class="modal-title">🔔 Notificações</div><button class="modal-close" onclick="closeModal('modal-notif')">✕</button></div>
+    <div class="modal-body" style="padding:0">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;background:rgba(239,68,68,0.05)">
+        <div style="font-size:20px">⚠</div>
+        <div><div class="text-sm font-semi">TechNova — Etapa atrasada 4 dias</div><div class="text-xs text-dim">Cadastro de Usuários venceu em 18/05 · há 2 min</div></div>
+      </div>
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start">
+        <div style="font-size:20px">📅</div>
+        <div><div class="text-sm font-semi">Treinamento Operacional amanhã</div><div class="text-xs text-dim">Construtora Zenith · 08:00 · há 1h</div></div>
+      </div>
+      <div style="padding:14px 20px;display:flex;gap:12px;align-items:flex-start">
+        <div style="font-size:20px">✓</div>
+        <div><div class="text-sm font-semi">Relatório diário assinado</div><div class="text-xs text-dim">Construtora Zenith · Marina F. · há 3h</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Novo Cliente -->
+<div class="modal-overlay" id="modal-novo-cliente">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">+ Novo Cliente</div><button class="modal-close" onclick="closeModal('modal-novo-cliente')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nome da Empresa</label><input class="form-input" placeholder="Razão social ou nome fantasia"></div>
+      <div class="flex gap-2">
+        <div class="form-group" style="flex:1"><label class="form-label">Segmento</label><select class="form-select"><option>Varejo</option><option>Tecnologia</option><option>Saúde</option><option>Construção</option><option>Outro</option></select></div>
+        <div class="form-group" style="flex:1"><label class="form-label">CNPJ</label><input class="form-input" placeholder="00.000.000/0001-00"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Nome do Responsável</label><input class="form-input" placeholder="Responsável pela implantação"></div>
+      <div class="flex gap-2">
+        <div class="form-group" style="flex:1"><label class="form-label">E-mail</label><input class="form-input" placeholder="email@empresa.com"></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Telefone</label><input class="form-input" placeholder="(00) 00000-0000"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Implantador Responsável</label><select class="form-select"><option>Lucas Mendes</option><option>Paula Rodrigues</option><option>Marina Ferreira</option></select></div>
+      <div class="form-group"><label class="form-label">Data de Início da Implantação</label><input type="date" class="form-input"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-novo-cliente')">Cancelar</button>
+      <button class="btn btn-primary">Criar Cliente + Gerar Etapas</button>
+    </div>
+  </div>
 </div>
 
 <script>
+const pages = {
+  dashboard: { title: 'Dashboard', action: '+ Novo Cliente', modal: 'modal-novo-cliente' },
+  kanban: { title: 'Kanban de Etapas', action: '+ Nova Etapa', modal: 'modal-etapa' },
+  clientes: { title: 'Gestão de Clientes', action: '+ Novo Cliente', modal: 'modal-novo-cliente' },
+  cronograma: { title: 'Planejamento de Cronograma', action: '⚡ Gerar Cronograma', modal: 'modal-cronograma-gerado' },
+  treinamentos: { title: 'Controle de Treinamentos', action: '+ Registrar Treinamento', modal: null },
+  relatorio: { title: 'Relatório Diário', action: '📄 Gerar PDF', modal: 'modal-pdf' },
+  despesas: { title: 'Despesas de Viagem', action: '+ Nova Despesa', modal: null },
+  configuracoes: { title: 'Configurações', action: '+ Novo Usuário', modal: null }
+};
 
-let fotosCupom = [];
-
-function criarInputCamera(){
-
-  const container =
-    document.getElementById('upload-container');
-
-  container.innerHTML = `
-
-    <input
-      type="file"
-      id="cupomFotos"
-      accept="image/*"
-      capture="environment"
-      multiple
-      class="form-input"
-      style="padding:12px"
-    >
-
-  `;
-
-  const input =
-    document.getElementById('cupomFotos');
-
-  input.addEventListener(
-    'change',
-    handleFotos
-  );
-
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  event.currentTarget.classList.add('active');
+  const cfg = pages[page];
+  document.getElementById('topbar-title').textContent = cfg.title;
+  document.getElementById('topbar-action').textContent = cfg.action;
 }
 
-function handleFotos(e){
-
-  const arquivos =
-    Array.from(e.target.files);
-
-  arquivos.forEach(file => {
-
-    fotosCupom.push({
-      id: crypto.randomUUID(),
-      file
-    });
-
-  });
-
-  renderizarFotos();
-
-}
-
-function renderizarFotos(){
-
-  const preview =
-    document.getElementById('previewFotos');
-
-  preview.innerHTML = '';
-
-  fotosCupom.forEach((fotoObj, index) => {
-
-    const url =
-      URL.createObjectURL(fotoObj.file);
-
-    preview.innerHTML += `
-
-      <div
-        style="
-          background:var(--bg3);
-          border-radius:12px;
-          overflow:hidden;
-          border:1px solid var(--border);
-        "
-      >
-
-        <img
-          src="${url}"
-          style="
-            width:100%;
-            height:140px;
-            object-fit:cover;
-            display:block;
-          "
-        >
-
-        <div style="padding:8px">
-
-          <div
-            style="
-              font-size:11px;
-              margin-bottom:8px;
-              color:var(--text2);
-              overflow:hidden;
-              text-overflow:ellipsis;
-              white-space:nowrap;
-            "
-          >
-            ${fotoObj.file.name}
-          </div>
-
-          <button
-            onclick="removerFoto(${index})"
-            style="
-              width:100%;
-              border:none;
-              padding:8px;
-              border-radius:8px;
-              background:#ef4444;
-              color:white;
-              cursor:pointer;
-              font-size:12px;
-            "
-          >
-            Remover
-          </button>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
-
-}
-
-function removerFoto(index){
-
-  fotosCupom.splice(index, 1);
-
-  renderizarFotos();
-
-}
-
-function salvarDespesa(){
-
-  const cliente =
-    document.getElementById(
-      'despesaCliente'
-    ).value;
-
-  const categoria =
-    document.getElementById(
-      'despesaCategoria'
-    ).value;
-
-  const valor =
-    document.getElementById(
-      'despesaValor'
-    ).value;
-
-  const obs =
-    document.getElementById(
-      'despesaObs'
-    ).value;
-
-  if(!valor){
-
-    alert('Informe o valor');
-
-    return;
-
+function topbarAction() {
+  const title = document.getElementById('topbar-title').textContent;
+  for (const [key, val] of Object.entries(pages)) {
+    if (val.title === title && val.modal) {
+      openModal(val.modal);
+      break;
+    }
   }
-
-  const despesas =
-    JSON.parse(
-      localStorage.getItem('despesas')
-      || '[]'
-    );
-
-  const novaDespesa = {
-
-    id: crypto.randomUUID(),
-
-    cliente,
-
-    categoria,
-
-    valor,
-
-    obs,
-
-    data:
-      new Date().toLocaleString(),
-
-    fotos:
-      fotosCupom.map(f => ({
-        nome: f.file.name
-      }))
-
-  };
-
-  despesas.push(novaDespesa);
-
-  localStorage.setItem(
-    'despesas',
-    JSON.stringify(despesas)
-  );
-
-  alert('Despesa salva com sucesso');
-
-  fotosCupom = [];
-
-  document.getElementById(
-    'previewFotos'
-  ).innerHTML = '';
-
-  document.getElementById(
-    'despesaValor'
-  ).value = '';
-
-  document.getElementById(
-    'despesaObs'
-  ).value = '';
-
-  criarInputCamera();
-
-  carregarDespesas();
-
 }
 
-function carregarDespesas(){
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-  const lista =
-    document.getElementById(
-      'listaDespesas'
-    );
-
-  lista.innerHTML = '';
-
-  const despesas =
-    JSON.parse(
-      localStorage.getItem('despesas')
-      || '[]'
-    );
-
-  despesas.reverse().forEach(item => {
-
-    lista.innerHTML += `
-
-      <div
-        style="
-          background:var(--bg3);
-          border-radius:12px;
-          padding:14px;
-          border:1px solid var(--border);
-        "
-      >
-
-        <div
-          style="
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:8px;
-          "
-        >
-
-          <div
-            style="
-              font-size:14px;
-              font-weight:700;
-            "
-          >
-            ${item.categoria}
-          </div>
-
-          <div
-            style="
-              color:#4ade80;
-              font-weight:700;
-            "
-          >
-            R$ ${item.valor}
-          </div>
-
-        </div>
-
-        <div
-          style="
-            font-size:12px;
-            color:var(--text2);
-            margin-bottom:6px;
-          "
-        >
-          Cliente:
-          ${item.cliente}
-        </div>
-
-        <div
-          style="
-            font-size:12px;
-            color:var(--text2);
-            margin-bottom:6px;
-          "
-        >
-          Fotos:
-          ${item.fotos.length}
-        </div>
-
-        <div
-          style="
-            font-size:11px;
-            color:var(--text3);
-          "
-        >
-          ${item.data}
-        </div>
-
-      </div>
-
-    `;
-
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
   });
-
-}
-
-criarInputCamera();
-
-carregarDespesas();
-
+});
 </script>
-```
-
-Principais correções aplicadas:
-
-* múltiplos uploads via câmera
-* correção do bug da segunda despesa
-* reset completo do input file no Android
-* compatibilidade Chrome Mobile
-* compatibilidade Samsung Internet
-* múltiplos cupons por despesa
-* preview das imagens
-* remoção de imagens
-* persistência no LocalStorage
-* recriação do input após salvar
-* IDs únicos com crypto.randomUUID()
-* limpeza completa do formulário após salvar
+</body>
+</html>
