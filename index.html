@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
 <meta charset="UTF-8">
@@ -174,17 +175,12 @@ table td{
     color:#16a34a;
 }
 
-img{
-    width:70px;
-    height:70px;
+.preview-image{
+    width:80px;
+    height:80px;
     object-fit:cover;
-    border-radius:8px;
-}
-
-.mobile-preview{
-    display:flex;
-    align-items:center;
-    gap:10px;
+    border-radius:10px;
+    border:1px solid #ddd;
 }
 
 .badge{
@@ -194,6 +190,11 @@ img{
     color:#1d4ed8;
     font-size:12px;
     font-weight:bold;
+}
+
+small{
+    margin-top:5px;
+    color:#6b7280;
 }
 
 @media(max-width:768px){
@@ -216,6 +217,10 @@ img{
 
     button{
         width:100%;
+    }
+
+    table{
+        min-width:700px;
     }
 
 }
@@ -280,6 +285,7 @@ img{
 </div>
 
 <div class="field">
+
 <label>Categoria</label>
 
 <select id="categoria">
@@ -295,6 +301,7 @@ img{
 </div>
 
 <div class="field">
+
 <label>Descrição</label>
 
 <input
@@ -314,16 +321,31 @@ placeholder="Digite a descrição"
 </div>
 
 <div class="field">
+
 <label>Cupom Fiscal</label>
 
 <input
 type="file"
 id="imagem"
-accept="image/*"
+accept="image/png, image/jpeg, image/jpg"
 capture="environment"
 >
 
+<small>
+Toque para tirar foto ou selecionar imagem
+</small>
+
 </div>
+
+</div>
+
+<div style="margin-top:20px;">
+
+<img
+id="preview"
+class="preview-image"
+style="display:none;"
+>
 
 </div>
 
@@ -419,11 +441,36 @@ localStorage.getItem("descricoes")
 renderizarTabela();
 renderizarDescricoes();
 
+document
+.getElementById("imagem")
+.addEventListener("change", previewImagem);
+
 function primeiraMaiuscula(texto){
 
-    texto = texto.toLowerCase();
+    texto = texto.trim().toLowerCase();
 
     return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+function previewImagem(event){
+
+    const arquivo = event.target.files[0];
+
+    if(!arquivo) return;
+
+    const preview =
+    document.getElementById("preview");
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        preview.src = e.target.result;
+
+        preview.style.display = "block";
+    };
+
+    reader.readAsDataURL(arquivo);
 }
 
 function salvarDespesa(){
@@ -497,9 +544,7 @@ function salvarDespesa(){
         renderizarDescricoes();
     }
 
-    const reader = new FileReader();
-
-    reader.onload = function(){
+    const salvarObjeto = (imagemBase64 = "") => {
 
         const despesa = {
 
@@ -513,7 +558,7 @@ function salvarDespesa(){
             categoria,
             descricao,
             valor,
-            imagem: reader.result
+            imagem: imagemBase64
 
         };
 
@@ -527,19 +572,47 @@ function salvarDespesa(){
         renderizarTabela();
 
         limparCampos();
-    }
 
-    if(imagemInput.files[0]){
+        alert("Despesa salva com sucesso!");
+    };
 
-        reader.readAsDataURL(
-            imagemInput.files[0]
-        );
+    const arquivo =
+    imagemInput.files[0];
+
+    if(arquivo){
+
+        if(arquivo.size > 5 * 1024 * 1024){
+
+            alert(
+                "Imagem muito grande. Use imagens menores que 5MB."
+            );
+
+            return;
+        }
+
+        const reader =
+        new FileReader();
+
+        reader.onload = function(e){
+
+            salvarObjeto(
+                e.target.result
+            );
+        };
+
+        reader.onerror = function(){
+
+            alert(
+                "Erro ao carregar imagem."
+            );
+        };
+
+        reader.readAsDataURL(arquivo);
 
     }else{
 
-        reader.onload();
+        salvarObjeto();
     }
-
 }
 
 function renderizarDescricoes(){
@@ -594,7 +667,10 @@ function renderizarTabela(){
                 ${
                     d.imagem
                     ?
-                    `<img src="${d.imagem}">`
+                    `<img
+                        src="${d.imagem}"
+                        class="preview-image"
+                    >`
                     :
                     `Sem imagem`
                 }
@@ -634,7 +710,6 @@ function removerDespesa(index){
 
         renderizarTabela();
     }
-
 }
 
 function limparCampos(){
@@ -643,6 +718,13 @@ function limparCampos(){
     document.getElementById("descricao").value = "";
     document.getElementById("valor").value = "";
     document.getElementById("imagem").value = "";
+
+    const preview =
+    document.getElementById("preview");
+
+    preview.src = "";
+
+    preview.style.display = "none";
 }
 
 function exportarExcel(){
@@ -667,9 +749,11 @@ function exportarExcel(){
 
 async function exportarPDF(){
 
-    const { jsPDF } = window.jspdf;
+    const { jsPDF } =
+    window.jspdf;
 
-    const doc = new jsPDF();
+    const doc =
+    new jsPDF();
 
     doc.setFontSize(18);
 
@@ -699,7 +783,6 @@ async function exportarPDF(){
 
             y = 20;
         }
-
     });
 
     doc.save(
