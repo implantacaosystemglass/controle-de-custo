@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle de Despesas</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#f4f4f4;
+      padding:20px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1{
+      margin-bottom:20px;
+      text-align:center;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:15px;
+      margin-bottom:20px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+    }
+
+    label{
+      margin-bottom:5px;
+      font-weight:bold;
+    }
+
+    input, select, textarea{
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+
+    button{
+      background:#007bff;
+      color:white;
+      border:none;
+      padding:12px;
+      border-radius:6px;
+      cursor:pointer;
+      margin-top:10px;
+      font-weight:bold;
+    }
+
+    button:hover{
+      background:#0056b3;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:20px;
+      background:white;
+    }
+
+    table th,
+    table td{
+      border:1px solid #ddd;
+      padding:10px;
+      text-align:center;
+    }
+
+    table th{
+      background:#f0f0f0;
+    }
+
+    img{
+      width:80px;
+      border-radius:6px;
+    }
+
+    .total{
+      margin-top:20px;
+      font-size:20px;
+      font-weight:bold;
+      text-align:right;
+    }
+
+    .delete-btn{
+      background:red;
+      padding:8px;
+    }
+
+    .delete-btn:hover{
+      background:darkred;
+    }
+
+    @media(max-width:768px){
+      table{
+        display:block;
+        overflow-x:auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Controle de Despesas de Viagem</h1>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label>Funcionário</label>
+      <input type="text" id="funcionario">
+    </div>
+
+    <div class="field">
+      <label>Cliente</label>
+      <input type="text" id="cliente">
+    </div>
+
+    <div class="field">
+      <label>Data</label>
+      <input type="date" id="data">
+    </div>
+
+    <div class="field">
+      <label>Categoria</label>
+      <select id="categoria">
+        <option>Refeição</option>
+        <option>Hotel</option>
+        <option>Combustível</option>
+        <option>Pedágio</option>
+        <option>Táxi/Uber</option>
+        <option>Outros</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Valor</label>
+      <input type="number" id="valor" step="0.01">
+    </div>
+
+    <div class="field">
+      <label>Descrição</label>
+      <input type="text" id="descricao">
+    </div>
+
+    <div class="field">
+      <label>Cupom Fiscal</label>
+      <input type="file" id="imagem" accept="image/*">
+    </div>
+
+  </div>
+
+  <button onclick="salvarDespesa()">
+    Salvar Despesa
+  </button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Funcionário</th>
+        <th>Cliente</th>
+        <th>Data</th>
+        <th>Categoria</th>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Cupom</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody id="tabelaDespesas"></tbody>
+  </table>
+
+  <div class="total" id="total">
+    Total: R$ 0,00
+  </div>
+
+</div>
+
+<script>
+
+let despesas = JSON.parse(localStorage.getItem("despesas")) || [];
+
+renderizarTabela();
+
+function salvarDespesa(){
+
+  const funcionario = document.getElementById("funcionario").value;
+  const cliente = document.getElementById("cliente").value;
+  const data = document.getElementById("data").value;
+  const categoria = document.getElementById("categoria").value;
+  const valor = document.getElementById("valor").value;
+  const descricao = document.getElementById("descricao").value;
+  const imagemInput = document.getElementById("imagem");
+
+  if(!funcionario || !cliente || !data || !valor){
+    alert("Preencha os campos obrigatórios");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(){
+
+    const despesa = {
+      funcionario,
+      cliente,
+      data,
+      categoria,
+      valor,
+      descricao,
+      imagem: reader.result
+    };
+
+    despesas.push(despesa);
+
+    localStorage.setItem("despesas", JSON.stringify(despesas));
+
+    limparFormulario();
+
+    renderizarTabela();
+  }
+
+  if(imagemInput.files[0]){
+    reader.readAsDataURL(imagemInput.files[0]);
+  } else {
+    reader.onload();
+  }
+}
+
+function renderizarTabela(){
+
+  const tabela = document.getElementById("tabelaDespesas");
+
+  tabela.innerHTML = "";
+
+  let total = 0;
+
+  despesas.forEach((despesa, index) => {
+
+    total += parseFloat(despesa.valor);
+
+    tabela.innerHTML += `
+      <tr>
+        <td>${despesa.funcionario}</td>
+        <td>${despesa.cliente}</td>
+        <td>${despesa.data}</td>
+        <td>${despesa.categoria}</td>
+        <td>${despesa.descricao}</td>
+        <td>R$ ${parseFloat(despesa.valor).toFixed(2)}</td>
+        <td>
+          ${
+            despesa.imagem
+            ? `<img src="${despesa.imagem}">`
+            : `Sem imagem`
+          }
+        </td>
+        <td>
+          <button class="delete-btn" onclick="removerDespesa(${index})">
+            Excluir
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("total").innerHTML =
+    `Total: R$ ${total.toFixed(2)}`;
+}
+
+function removerDespesa(index){
+
+  if(confirm("Deseja remover esta despesa?")){
+
+    despesas.splice(index,1);
+
+    localStorage.setItem("despesas", JSON.stringify(despesas));
+
+    renderizarTabela();
+  }
+}
+
+function limparFormulario(){
+
+  document.getElementById("funcionario").value = "";
+  document.getElementById("cliente").value = "";
+  document.getElementById("data").value = "";
+  document.getElementById("valor").value = "";
+  document.getElementById("descricao").value = "";
+  document.getElementById("imagem").value = "";
+}
+
+</script>
+
+</body>
+</html>
